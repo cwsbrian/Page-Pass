@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:17.10-alpine
+    environment:
+      POSTGRES_DB: ${PAGEPASS_DB_NAME:-pagepass}
+      POSTGRES_USER: ${PAGEPASS_DB_USER:-pagepass}
+      POSTGRES_PASSWORD: ${PAGEPASS_DB_PASSWORD:?PAGEPASS_DB_PASSWORD is required}
+    ports:
+      - "127.0.0.1:${PAGEPASS_DB_PORT:-54329}:5432"
+    volumes:
+      - pagepass-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+    restart: unless-stopped
+
+volumes:
+  pagepass-postgres-data:

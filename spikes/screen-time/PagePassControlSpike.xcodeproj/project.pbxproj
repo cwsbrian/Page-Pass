@@ -1,0 +1,852 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		11E65736C451FA011751CFDD /* SpikeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312E2488593F35CE33E42795 /* SpikeState.swift */; };
+		17FC1EF375D14E504D269297 /* AuthorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4FE4C33344BAA78046433BC /* AuthorizationService.swift */; };
+		1BAD6347B21C63D2EF61A7A2 /* SpikeState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 312E2488593F35CE33E42795 /* SpikeState.swift */; };
+		208649F680D32AF1005337F7 /* ShieldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B87AC77E6D5570B8417A66 /* ShieldController.swift */; };
+		21393D60A916CDC764D2C489 /* PagePassControlSpikeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAAD2F6E239248757D3D414 /* PagePassControlSpikeApp.swift */; };
+		23ABBB1C9E663CF13382A974 /* SpikeReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5D107042A73EE0084A4020 /* SpikeReducer.swift */; };
+		26A956EA12AD1D861746DF98 /* SpikeReducerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC8128441B7D7B641C61386 /* SpikeReducerTests.swift */; };
+		33077E54ACAF211377FD225C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7CDC30523AA0669A37DD22A /* Foundation.framework */; };
+		3F5B69C4E1A0E6B65E285A8E /* SpikeReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5D107042A73EE0084A4020 /* SpikeReducer.swift */; };
+		4930032F0D63A7DA8D0F31D8 /* RunNameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD235C159502375CC40DA793 /* RunNameTests.swift */; };
+		4F2CC4C2EA2E5DE324F78EA0 /* PagePassControlMonitor.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DC14A7CFFCEA171EAFD52B11 /* PagePassControlMonitor.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		51529F4832D1E867B91F68F5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7CDC30523AA0669A37DD22A /* Foundation.framework */; };
+		5E5B3D0D57732B9A63A57556 /* SpikeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAB44CC40FB8D025F536075 /* SpikeViewModel.swift */; };
+		65A51EEEA3E330140C3E4660 /* PagePassDeviceActivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB323B3AB89CA7E2B17DDFF /* PagePassDeviceActivityMonitor.swift */; };
+		66A8ED609480570DA740D560 /* SpikeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CBA0F9FE7D8D102238E8A /* SpikeEvent.swift */; };
+		7022E3A42094F2794D5690B0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1625BC04279E311D64A7C3 /* ContentView.swift */; };
+		7260CF560F720477BA9E366A /* SpikeStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116CDAE0C1657B3B3882AAC3 /* SpikeStateStore.swift */; };
+		836D418710DD6CFC3005A8EB /* SpikeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7CBA0F9FE7D8D102238E8A /* SpikeEvent.swift */; };
+		929BC94A6381B55783B4B425 /* PagePassControlReport.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 93F1DD6C3506817E74B59F79 /* PagePassControlReport.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A11A11A11A11A11A11A11A11 /* ManagedAppPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00A00A00A00A00A00A00A00 /* ManagedAppPolicy.swift */; };
+		A22A22A22A22A22A22A22A22 /* ManagedAppPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00A00A00A00A00A00A00A00 /* ManagedAppPolicy.swift */; };
+		B0A484117F919EAFEA5BD695 /* SpikeStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116CDAE0C1657B3B3882AAC3 /* SpikeStateStore.swift */; };
+		B1711E974E2871E1AD5730ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7CDC30523AA0669A37DD22A /* Foundation.framework */; };
+		B77F534B41BE94CF15560D91 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7CDC30523AA0669A37DD22A /* Foundation.framework */; };
+		BDC7E0683BBDA511D59B0371 /* UsageDiagnosticView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C460DE90D07BCE7EE35B67 /* UsageDiagnosticView.swift */; };
+		C4C6A6CA2AF951CF490D3451 /* PagePassDeviceActivityReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E2FECC61C1D50C3DFD8935 /* PagePassDeviceActivityReport.swift */; };
+		C8F641783A56FDBE54AF113E /* ActivityMonitorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756E139C77572830F5477E9D /* ActivityMonitorService.swift */; };
+		C8F641783A56FDBE54AF113F /* ActivityMonitorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756E139C77572830F5477E9D /* ActivityMonitorService.swift */; };
+		D0EAC1611DB1D81F473C0731 /* SpikeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DAAE05DF5AB6006CABD499 /* SpikeConstants.swift */; };
+		E6F0B76CA9BCBBA63CAD669F /* SpikeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DAAE05DF5AB6006CABD499 /* SpikeConstants.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		21301758B398DEC0A6BDB95E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 79C22DA841E9A896835D6343 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9822EFA98A9486C1D1769C1E;
+			remoteInfo = PagePassControlMonitor;
+		};
+		37C89CCC79B1CB976D399388 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 79C22DA841E9A896835D6343 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 269376F58307CF9BBFE2D532;
+			remoteInfo = PagePassControlReport;
+		};
+		E7EAC2E1433CE3CED853F023 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 79C22DA841E9A896835D6343 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4803EE67FC2E8C7B0683EAB9;
+			remoteInfo = PagePassControlSpike;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		18AE062EBA7348536037949C /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4F2CC4C2EA2E5DE324F78EA0 /* PagePassControlMonitor.appex in Embed App Extensions */,
+				929BC94A6381B55783B4B425 /* PagePassControlReport.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		116CDAE0C1657B3B3882AAC3 /* SpikeStateStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpikeStateStore.swift; sourceTree = "<group>"; };
+		15DAAE05DF5AB6006CABD499 /* SpikeConstants.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpikeConstants.swift; sourceTree = "<group>"; };
+		2E5D107042A73EE0084A4020 /* SpikeReducer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpikeReducer.swift; sourceTree = "<group>"; };
+		312E2488593F35CE33E42795 /* SpikeState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpikeState.swift; sourceTree = "<group>"; };
+		31C460DE90D07BCE7EE35B67 /* UsageDiagnosticView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UsageDiagnosticView.swift; sourceTree = "<group>"; };
+		4CC93E487997D47BB3FC3116 /* PagePassControlSpikeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PagePassControlSpikeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E5B44E3780FD3CB11AEDB99 /* PagePassControlSpike.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = PagePassControlSpike.entitlements; sourceTree = "<group>"; };
+		5AAAD2F6E239248757D3D414 /* PagePassControlSpikeApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PagePassControlSpikeApp.swift; sourceTree = "<group>"; };
+		5AC8128441B7D7B641C61386 /* SpikeReducerTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpikeReducerTests.swift; sourceTree = "<group>"; };
+		5BEB302BAFCCB4E778065B0F /* PagePassControlReport.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = PagePassControlReport.entitlements; sourceTree = "<group>"; };
+		65B87AC77E6D5570B8417A66 /* ShieldController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShieldController.swift; sourceTree = "<group>"; };
+		6DAB44CC40FB8D025F536075 /* SpikeViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpikeViewModel.swift; sourceTree = "<group>"; };
+		756E139C77572830F5477E9D /* ActivityMonitorService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ActivityMonitorService.swift; sourceTree = "<group>"; };
+		88903710ED2FD3CC8A175BA7 /* PagePassControlMonitor.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = PagePassControlMonitor.entitlements; sourceTree = "<group>"; };
+		899F5FF7A6F8033A8D5E8B00 /* PagePassControlSpike.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PagePassControlSpike.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		93F1DD6C3506817E74B59F79 /* PagePassControlReport.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PagePassControlReport.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		97CC8D763671A6F9A4437035 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A00A00A00A00A00A00A00A00 /* ManagedAppPolicy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ManagedAppPolicy.swift; sourceTree = "<group>"; };
+		A4FE4C33344BAA78046433BC /* AuthorizationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationService.swift; sourceTree = "<group>"; };
+		AA1625BC04279E311D64A7C3 /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AD235C159502375CC40DA793 /* RunNameTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RunNameTests.swift; sourceTree = "<group>"; };
+		B7CDC30523AA0669A37DD22A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		BEB323B3AB89CA7E2B17DDFF /* PagePassDeviceActivityMonitor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PagePassDeviceActivityMonitor.swift; sourceTree = "<group>"; };
+		CD7CBA0F9FE7D8D102238E8A /* SpikeEvent.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpikeEvent.swift; sourceTree = "<group>"; };
+		DC14A7CFFCEA171EAFD52B11 /* PagePassControlMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PagePassControlMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4444032751865F5498DF668 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F3E2FECC61C1D50C3DFD8935 /* PagePassDeviceActivityReport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PagePassDeviceActivityReport.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0B1D98B6DD6BD7CDA6A3FB36 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				51529F4832D1E867B91F68F5 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		238D19788DF896896E133E92 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33077E54ACAF211377FD225C /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6455BE834A3FAF06BDF9F8B1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B1711E974E2871E1AD5730ED /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA7A749D85B2BC230BB719D2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B77F534B41BE94CF15560D91 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2354CC31287E5C71989CA7B9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6BC288285A2AC6AF5C251C12 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		33E6C13A0F478112D275E714 /* PagePassControlSpike */ = {
+			isa = PBXGroup;
+			children = (
+				8E2B3C845CA4E5376402331D /* Shared */,
+				5AAAD2F6E239248757D3D414 /* PagePassControlSpikeApp.swift */,
+				AA1625BC04279E311D64A7C3 /* ContentView.swift */,
+				4E5B44E3780FD3CB11AEDB99 /* PagePassControlSpike.entitlements */,
+				65B87AC77E6D5570B8417A66 /* ShieldController.swift */,
+				6DAB44CC40FB8D025F536075 /* SpikeViewModel.swift */,
+				A4FE4C33344BAA78046433BC /* AuthorizationService.swift */,
+				756E139C77572830F5477E9D /* ActivityMonitorService.swift */,
+				31C460DE90D07BCE7EE35B67 /* UsageDiagnosticView.swift */,
+			);
+			name = PagePassControlSpike;
+			path = PagePassControlSpike;
+			sourceTree = "<group>";
+		};
+		5215F303A99B603FB47B53F9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				899F5FF7A6F8033A8D5E8B00 /* PagePassControlSpike.app */,
+				DC14A7CFFCEA171EAFD52B11 /* PagePassControlMonitor.appex */,
+				4CC93E487997D47BB3FC3116 /* PagePassControlSpikeTests.xctest */,
+				93F1DD6C3506817E74B59F79 /* PagePassControlReport.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6BC288285A2AC6AF5C251C12 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				B7CDC30523AA0669A37DD22A /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		8E2B3C845CA4E5376402331D /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				A00A00A00A00A00A00A00A00 /* ManagedAppPolicy.swift */,
+				312E2488593F35CE33E42795 /* SpikeState.swift */,
+				2E5D107042A73EE0084A4020 /* SpikeReducer.swift */,
+				15DAAE05DF5AB6006CABD499 /* SpikeConstants.swift */,
+				CD7CBA0F9FE7D8D102238E8A /* SpikeEvent.swift */,
+				116CDAE0C1657B3B3882AAC3 /* SpikeStateStore.swift */,
+			);
+			name = Shared;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		C31FDEF79181A43A68333007 = {
+			isa = PBXGroup;
+			children = (
+				5215F303A99B603FB47B53F9 /* Products */,
+				2354CC31287E5C71989CA7B9 /* Frameworks */,
+				33E6C13A0F478112D275E714 /* PagePassControlSpike */,
+				E018C1976ACF2F006679547A /* PagePassControlMonitor */,
+				EB3998ECD99BC8D8EBB51EA3 /* PagePassControlSpikeTests */,
+				E7BE56034673B61B8175C8FA /* PagePassControlReport */,
+			);
+			sourceTree = "<group>";
+		};
+		E018C1976ACF2F006679547A /* PagePassControlMonitor */ = {
+			isa = PBXGroup;
+			children = (
+				88903710ED2FD3CC8A175BA7 /* PagePassControlMonitor.entitlements */,
+				97CC8D763671A6F9A4437035 /* Info.plist */,
+				BEB323B3AB89CA7E2B17DDFF /* PagePassDeviceActivityMonitor.swift */,
+			);
+			name = PagePassControlMonitor;
+			path = PagePassControlMonitor;
+			sourceTree = "<group>";
+		};
+		E7BE56034673B61B8175C8FA /* PagePassControlReport */ = {
+			isa = PBXGroup;
+			children = (
+				F3E2FECC61C1D50C3DFD8935 /* PagePassDeviceActivityReport.swift */,
+				E4444032751865F5498DF668 /* Info.plist */,
+				5BEB302BAFCCB4E778065B0F /* PagePassControlReport.entitlements */,
+			);
+			name = PagePassControlReport;
+			path = PagePassControlReport;
+			sourceTree = "<group>";
+		};
+		EB3998ECD99BC8D8EBB51EA3 /* PagePassControlSpikeTests */ = {
+			isa = PBXGroup;
+			children = (
+				5AC8128441B7D7B641C61386 /* SpikeReducerTests.swift */,
+				AD235C159502375CC40DA793 /* RunNameTests.swift */,
+			);
+			name = PagePassControlSpikeTests;
+			path = PagePassControlSpikeTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		269376F58307CF9BBFE2D532 /* PagePassControlReport */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CC9A669E5040350BC3D691CD /* Build configuration list for PBXNativeTarget "PagePassControlReport" */;
+			buildPhases = (
+				CF58823581C757AC1230BC56 /* Sources */,
+				BA7A749D85B2BC230BB719D2 /* Frameworks */,
+				FFC096B52904BC66C1A4417D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PagePassControlReport;
+			productName = PagePassControlReport;
+			productReference = 93F1DD6C3506817E74B59F79 /* PagePassControlReport.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		4803EE67FC2E8C7B0683EAB9 /* PagePassControlSpike */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 01ECE4C05E6A27BFA81CA6E3 /* Build configuration list for PBXNativeTarget "PagePassControlSpike" */;
+			buildPhases = (
+				7D9CD06031ED166A5E5A8261 /* Sources */,
+				6455BE834A3FAF06BDF9F8B1 /* Frameworks */,
+				DA9D61793373A0B3D37987C7 /* Resources */,
+				18AE062EBA7348536037949C /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				32213CBD06CD0142AD606867 /* PBXTargetDependency */,
+				98A156303A73FD89505019E8 /* PBXTargetDependency */,
+			);
+			name = PagePassControlSpike;
+			productName = PagePassControlSpike;
+			productReference = 899F5FF7A6F8033A8D5E8B00 /* PagePassControlSpike.app */;
+			productType = "com.apple.product-type.application";
+		};
+		9822EFA98A9486C1D1769C1E /* PagePassControlMonitor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4BA1134BF8DE906D8A3060E /* Build configuration list for PBXNativeTarget "PagePassControlMonitor" */;
+			buildPhases = (
+				771C6F4DB341E49B1BE5F39C /* Sources */,
+				0B1D98B6DD6BD7CDA6A3FB36 /* Frameworks */,
+				D98CF3CACEEB04551D2CBD7F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PagePassControlMonitor;
+			productName = PagePassControlMonitor;
+			productReference = DC14A7CFFCEA171EAFD52B11 /* PagePassControlMonitor.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		B19EA4803C0D088B61C72D5C /* PagePassControlSpikeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FFBBEF0373B8784A6908D9A4 /* Build configuration list for PBXNativeTarget "PagePassControlSpikeTests" */;
+			buildPhases = (
+				6CD91A53BA0ACC78AD9C796B /* Sources */,
+				238D19788DF896896E133E92 /* Frameworks */,
+				776CF4E416846E7FDA0164D7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F801589C8894616EF1631424 /* PBXTargetDependency */,
+			);
+			name = PagePassControlSpikeTests;
+			productName = PagePassControlSpikeTests;
+			productReference = 4CC93E487997D47BB3FC3116 /* PagePassControlSpikeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		79C22DA841E9A896835D6343 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					4803EE67FC2E8C7B0683EAB9 = {
+						DevelopmentTeam = 2VL68NBQ25;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.FamilyControls = {
+								enabled = 1;
+							};
+						};
+					};
+					9822EFA98A9486C1D1769C1E = {
+						DevelopmentTeam = 2VL68NBQ25;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+							com.apple.FamilyControls = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = D4710E8320185E91C028241F /* Build configuration list for PBXProject "PagePassControlSpike" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C31FDEF79181A43A68333007;
+			minimizedProjectReferenceProxies = 0;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 5215F303A99B603FB47B53F9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4803EE67FC2E8C7B0683EAB9 /* PagePassControlSpike */,
+				9822EFA98A9486C1D1769C1E /* PagePassControlMonitor */,
+				B19EA4803C0D088B61C72D5C /* PagePassControlSpikeTests */,
+				269376F58307CF9BBFE2D532 /* PagePassControlReport */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		776CF4E416846E7FDA0164D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D98CF3CACEEB04551D2CBD7F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DA9D61793373A0B3D37987C7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FFC096B52904BC66C1A4417D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6CD91A53BA0ACC78AD9C796B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26A956EA12AD1D861746DF98 /* SpikeReducerTests.swift in Sources */,
+				4930032F0D63A7DA8D0F31D8 /* RunNameTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		771C6F4DB341E49B1BE5F39C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A22A22A22A22A22A22A22A22 /* ManagedAppPolicy.swift in Sources */,
+				65A51EEEA3E330140C3E4660 /* PagePassDeviceActivityMonitor.swift in Sources */,
+				D0EAC1611DB1D81F473C0731 /* SpikeConstants.swift in Sources */,
+				66A8ED609480570DA740D560 /* SpikeEvent.swift in Sources */,
+				11E65736C451FA011751CFDD /* SpikeState.swift in Sources */,
+				3F5B69C4E1A0E6B65E285A8E /* SpikeReducer.swift in Sources */,
+				B0A484117F919EAFEA5BD695 /* SpikeStateStore.swift in Sources */,
+				C8F641783A56FDBE54AF113E /* ActivityMonitorService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7D9CD06031ED166A5E5A8261 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A11A11A11A11A11A11A11A11 /* ManagedAppPolicy.swift in Sources */,
+				21393D60A916CDC764D2C489 /* PagePassControlSpikeApp.swift in Sources */,
+				7022E3A42094F2794D5690B0 /* ContentView.swift in Sources */,
+				1BAD6347B21C63D2EF61A7A2 /* SpikeState.swift in Sources */,
+				23ABBB1C9E663CF13382A974 /* SpikeReducer.swift in Sources */,
+				E6F0B76CA9BCBBA63CAD669F /* SpikeConstants.swift in Sources */,
+				836D418710DD6CFC3005A8EB /* SpikeEvent.swift in Sources */,
+				7260CF560F720477BA9E366A /* SpikeStateStore.swift in Sources */,
+				208649F680D32AF1005337F7 /* ShieldController.swift in Sources */,
+				5E5B3D0D57732B9A63A57556 /* SpikeViewModel.swift in Sources */,
+				17FC1EF375D14E504D269297 /* AuthorizationService.swift in Sources */,
+				C8F641783A56FDBE54AF113F /* ActivityMonitorService.swift in Sources */,
+				BDC7E0683BBDA511D59B0371 /* UsageDiagnosticView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CF58823581C757AC1230BC56 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4C6A6CA2AF951CF490D3451 /* PagePassDeviceActivityReport.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		32213CBD06CD0142AD606867 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PagePassControlMonitor;
+			target = 9822EFA98A9486C1D1769C1E /* PagePassControlMonitor */;
+			targetProxy = 21301758B398DEC0A6BDB95E /* PBXContainerItemProxy */;
+		};
+		98A156303A73FD89505019E8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PagePassControlReport;
+			target = 269376F58307CF9BBFE2D532 /* PagePassControlReport */;
+			targetProxy = 37C89CCC79B1CB976D399388 /* PBXContainerItemProxy */;
+		};
+		F801589C8894616EF1631424 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PagePassControlSpike;
+			target = 4803EE67FC2E8C7B0683EAB9 /* PagePassControlSpike */;
+			targetProxy = E7EAC2E1433CE3CED853F023 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4930C1BA1D84495A6D4C6B33 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = PagePassControlMonitor/PagePassControlMonitor.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2VL68NBQ25;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				INFOPLIST_FILE = PagePassControlMonitor/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pagepass.controlspike.DeviceActivityMonitor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		63C9D89E8B3AACFC063C3FC3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		BD9644543A609C9DE7F23A6F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = PagePassControlReport/PagePassControlReport.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2VL68NBQ25;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PagePassControlReport/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pagepass.controlspike.DeviceActivityReport;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		C7A6450834D44CF9C269FC10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pagepass.controlspike.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PagePassControlSpike.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PagePassControlSpike";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D2A482BD465B7F210BE4D560 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pagepass.controlspike.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PagePassControlSpike.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PagePassControlSpike";
+			};
+			name = Debug;
+		};
+		D76E8D606FDE61499E228364 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = PagePassControlMonitor/PagePassControlMonitor.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2VL68NBQ25;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				INFOPLIST_FILE = PagePassControlMonitor/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pagepass.controlspike.DeviceActivityMonitor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E0D2D963F7F2DED686136A3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = PagePassControlSpike/PagePassControlSpike.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2VL68NBQ25;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "PagePass Spike";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pagepass.controlspike;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		E3FF4A3E5483948569401DFA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = PagePassControlSpike/PagePassControlSpike.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2VL68NBQ25;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "PagePass Spike";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pagepass.controlspike;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E6D16D1DC86E701AF698F05C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F763C8E38F25A4938637E35A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = PagePassControlReport/PagePassControlReport.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2VL68NBQ25;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = PagePassControlReport/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pagepass.controlspike.DeviceActivityReport;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		01ECE4C05E6A27BFA81CA6E3 /* Build configuration list for PBXNativeTarget "PagePassControlSpike" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E3FF4A3E5483948569401DFA /* Release */,
+				E0D2D963F7F2DED686136A3D /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CC9A669E5040350BC3D691CD /* Build configuration list for PBXNativeTarget "PagePassControlReport" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F763C8E38F25A4938637E35A /* Release */,
+				BD9644543A609C9DE7F23A6F /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D4710E8320185E91C028241F /* Build configuration list for PBXProject "PagePassControlSpike" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E6D16D1DC86E701AF698F05C /* Debug */,
+				63C9D89E8B3AACFC063C3FC3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E4BA1134BF8DE906D8A3060E /* Build configuration list for PBXNativeTarget "PagePassControlMonitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D76E8D606FDE61499E228364 /* Release */,
+				4930C1BA1D84495A6D4C6B33 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FFBBEF0373B8784A6908D9A4 /* Build configuration list for PBXNativeTarget "PagePassControlSpikeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7A6450834D44CF9C269FC10 /* Release */,
+				D2A482BD465B7F210BE4D560 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 79C22DA841E9A896835D6343 /* Project object */;
+}

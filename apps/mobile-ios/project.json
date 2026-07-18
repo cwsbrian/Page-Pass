@@ -1,0 +1,30 @@
+{
+  "name": "mobile-ios",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/mobile-ios/App",
+  "targets": {
+    "generate": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/PagePass.xcodeproj"],
+      "options": {
+        "command": "xcodegen generate --spec apps/mobile-ios/project.yml"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["generate"],
+      "outputs": ["{workspaceRoot}/.build/PagePassProduct"],
+      "options": {
+        "command": "xcodebuild -project apps/mobile-ios/PagePass.xcodeproj -scheme PagePass -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath .build/PagePassProduct CODE_SIGNING_ALLOWED=NO build"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "swift test --package-path apps/mobile-ios/Packages/PagePassCore"
+      }
+    }
+  }
+}
+

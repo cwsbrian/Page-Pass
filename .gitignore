@@ -1,0 +1,14 @@
+node_modules/
+.nx/
+dist/
+.build/
+idb-*/
+apps/api/src/generated/prisma/
+/docs/manual-tests/evidence/
+
+*.xcuserstate
+**/xcuserdata/
+**/DerivedData/
+apps/mobile-ios/PagePass.xcodeproj/
+spikes/*
+.DS_Store

@@ -1,0 +1,101 @@
+name: PagePass
+
+options:
+  bundleIdPrefix: com.pagepass
+  deploymentTarget:
+    iOS: "17.4"
+  groupSortPosition: top
+
+settings:
+  base:
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: 2VL68NBQ25
+    SWIFT_VERSION: 6.0
+    VERSIONING_SYSTEM: apple-generic
+
+packages:
+  PagePassCore:
+    path: Packages/PagePassCore
+
+targets:
+  PagePass:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+      - path: Shared
+    dependencies:
+      - package: PagePassCore
+      - target: PagePassDeviceActivityMonitor
+        embed: true
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: PagePass
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "1"
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: $(PAGEPASS_ALLOWS_ARBITRARY_LOADS)
+          NSAllowsLocalNetworking: true
+        NSCameraUsageDescription: Scan a PagePass child-device pairing code.
+        NSLocalNetworkUsageDescription: PagePass connects to the development server on your local network.
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    settings:
+      base:
+        CODE_SIGN_ENTITLEMENTS: App/PagePass.entitlements
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 0.1.0
+        PRODUCT_BUNDLE_IDENTIFIER: com.pagepass.app
+        PRODUCT_NAME: PagePass
+      configs:
+        Debug:
+          PAGEPASS_ALLOWS_ARBITRARY_LOADS: true
+        Release:
+          PAGEPASS_ALLOWS_ARBITRARY_LOADS: false
+    scheme:
+      testTargets:
+        - PagePassTests
+
+  PagePassDeviceActivityMonitor:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: Monitor
+      - path: Shared
+    dependencies:
+      - package: PagePassCore
+    info:
+      path: Monitor/Info.plist
+      properties:
+        CFBundleDisplayName: PagePass Monitor
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "1"
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.deviceactivity.monitor-extension
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).PagePassDeviceActivityMonitor
+    settings:
+      base:
+        CODE_SIGN_ENTITLEMENTS: Monitor/PagePassDeviceActivityMonitor.entitlements
+        PRODUCT_BUNDLE_IDENTIFIER: com.pagepass.app.DeviceActivityMonitor
+        PRODUCT_NAME: PagePassDeviceActivityMonitor
+        SKIP_INSTALL: true
+
+  PagePassTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests
+    dependencies:
+      - target: PagePass
+      - package: PagePassCore
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: true
+        PRODUCT_BUNDLE_IDENTIFIER: com.pagepass.app.tests

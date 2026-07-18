@@ -1,0 +1,83 @@
+{
+  "name": "api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/api/src",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["prisma-generate"],
+      "outputs": ["{workspaceRoot}/dist/apps/api"],
+      "options": {
+        "command": "pnpm exec tsc -p apps/api/tsconfig.json"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec tsx --test apps/api/src/main.test.ts"
+      }
+    },
+    "integration-test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "if [ -n \"$TEST_DATABASE_URL\" ]; then DATABASE_URL=\"$TEST_DATABASE_URL\" pnpm exec prisma migrate deploy --config prisma.config.ts || exit $?; fi; pnpm exec tsx --test apps/api/src/postgres.integration.test.ts"
+      }
+    },
+    "auth-integration-test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "if [ -n \"$TEST_DATABASE_URL\" ]; then DATABASE_URL=\"$TEST_DATABASE_URL\" pnpm exec prisma migrate deploy --config prisma.config.ts || exit $?; fi; pnpm exec tsx --test apps/api/src/postgres-auth.integration.test.ts"
+      }
+    },
+    "adversarial-integration-test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "if [ -n \"$TEST_DATABASE_URL\" ]; then DATABASE_URL=\"$TEST_DATABASE_URL\" pnpm exec prisma migrate deploy --config prisma.config.ts || exit $?; fi; pnpm exec tsx --test apps/api/src/postgres-adversarial.integration.test.ts"
+      }
+    },
+    "prisma-generate": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/apps/api/src/generated/prisma"],
+      "options": {
+        "command": "pnpm exec prisma generate --config prisma.config.ts"
+      }
+    },
+    "prisma-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec prisma validate --config prisma.config.ts"
+      }
+    },
+    "migrate-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec prisma migrate dev --config prisma.config.ts"
+      }
+    },
+    "migrate-deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec prisma migrate deploy --config prisma.config.ts"
+      }
+    },
+    "migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec prisma migrate deploy --config prisma.config.ts"
+      }
+    },
+    "prisma-studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec prisma studio --config prisma.config.ts"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec tsx apps/api/src/main.ts"
+      }
+    }
+  }
+}

@@ -1,0 +1,138 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model ServerState {
+  singleton                Boolean        @id @default(true)
+  serverInstanceId         String         @map("server_instance_id") @db.Uuid
+  parentTokenHash          Bytes          @map("parent_token_hash")
+  ledgerRevision           BigInt         @default(0) @map("ledger_revision")
+  pepperCheck              Bytes?         @map("pepper_check")
+  localDataClaimedParentId String?        @map("local_data_claimed_parent_id") @db.Uuid
+  localDataClaimedChildren Int?           @map("local_data_claimed_children")
+  localDataClaimedParent   ParentAccount? @relation(fields: [localDataClaimedParentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("server_state")
+}
+
+model ParentAccount {
+  id                  String          @id @db.Uuid
+  issuer              String
+  subject             String
+  displayName         String          @map("display_name")
+  identityEmail       String?         @map("identity_email")
+  createdAt           DateTime        @map("created_at") @db.Timestamptz(6)
+  children            Child[]
+  parentSessions      ParentSession[]
+  claimedServerStates ServerState[]
+
+  @@unique([issuer, subject])
+  @@map("parent_accounts")
+}
+
+model AppleAuthChallenge {
+  id          String    @id @db.Uuid
+  stateDigest Bytes     @unique @map("state_digest")
+  nonceDigest Bytes     @map("nonce_digest")
+  expiresAt   DateTime  @map("expires_at") @db.Timestamptz(6)
+  consumedAt  DateTime? @map("consumed_at") @db.Timestamptz(6)
+  createdAt   DateTime  @map("created_at") @db.Timestamptz(6)
+
+  @@index([expiresAt], map: "apple_auth_challenges_expiry_idx")
+  @@map("apple_auth_challenges")
+}
+
+model ParentSession {
+  id          String        @id @db.Uuid
+  parentId    String        @map("parent_id") @db.Uuid
+  tokenDigest Bytes         @unique @map("token_digest")
+  expiresAt   DateTime      @map("expires_at") @db.Timestamptz(6)
+  revokedAt   DateTime?     @map("revoked_at") @db.Timestamptz(6)
+  createdAt   DateTime      @map("created_at") @db.Timestamptz(6)
+  parent      ParentAccount @relation(fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("parent_sessions")
+}
+
+model Child {
+  id               String            @id @db.Uuid
+  name             String
+  ownerParentId    String            @map("owner_parent_id") @db.Uuid
+  ownerParent      ParentAccount     @relation(fields: [ownerParentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  pairingSessions  PairingSession[]
+  activeDevice     ActiveDevice?
+  creditGrants     CreditGrant[]
+  earnedTimeSpends EarnedTimeSpend[]
+
+  @@index([ownerParentId], map: "children_owner_parent_id_idx")
+  @@map("children")
+}
+
+model PairingSession {
+  id              String    @id @db.Uuid
+  childProfileId  String    @map("child_profile_id") @db.Uuid
+  qrTokenHash     Bytes     @unique @map("qr_token_hash")
+  numericCodeHash Bytes     @unique @map("numeric_code_hash")
+  expiresAt       DateTime  @map("expires_at") @db.Timestamptz(6)
+  consumedAt      DateTime? @map("consumed_at") @db.Timestamptz(6)
+  child           Child     @relation(fields: [childProfileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("pairing_sessions")
+}
+
+model ActiveDevice {
+  childProfileId String @id @map("child_profile_id") @db.Uuid
+  installationId String @unique @map("installation_id")
+  deviceName     String @map("device_name")
+  credentialHash Bytes  @unique @map("credential_hash")
+  child          Child  @relation(fields: [childProfileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("active_devices")
+}
+
+model CreditGrant {
+  id             String   @id @db.Uuid
+  childProfileId String   @map("child_profile_id") @db.Uuid
+  seconds        Int
+  reason         String
+  idempotencyKey String   @unique @map("idempotency_key")
+  fingerprint    String
+  createdAt      DateTime @map("created_at") @db.Timestamptz(6)
+  balanceSeconds BigInt   @map("balance_seconds")
+  child          Child    @relation(fields: [childProfileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("credit_grants")
+}
+
+model EarnedTimeSpend {
+  id              String   @id @db.Uuid
+  childProfileId  String   @map("child_profile_id") @db.Uuid
+  installationId  String   @map("installation_id")
+  localSessionId  String   @map("local_session_id")
+  consumedSeconds Int      @map("consumed_seconds")
+  balanceSeconds  BigInt   @map("balance_seconds")
+  settledAt       DateTime @map("settled_at") @db.Timestamptz(6)
+  idempotencyKey  String   @map("idempotency_key")
+  fingerprint     String
+  child           Child    @relation(fields: [childProfileId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([childProfileId, idempotencyKey])
+  @@unique([childProfileId, localSessionId])
+  @@map("earned_time_spends")
+}
+
+model PairingRateAttempt {
+  id          BigInt   @id @default(autoincrement())
+  dimension   String
+  keyHash     Bytes    @map("key_hash")
+  attemptedAt DateTime @map("attempted_at") @db.Timestamptz(6)
+
+  @@index([dimension, keyHash, attemptedAt], map: "pairing_rate_attempts_lookup_idx")
+  @@map("pairing_rate_attempts")
+}

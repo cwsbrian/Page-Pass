@@ -1,0 +1,26 @@
+{
+  "name": "page-pass",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.30.0",
+  "scripts": {
+    "nx": "nx",
+    "build": "nx run-many -t build",
+    "test": "nx run-many -t test",
+    "ios:generate": "nx run mobile-ios:generate",
+    "ios:build": "nx run mobile-ios:build",
+    "ios:test": "nx run mobile-ios:test"
+  },
+  "dependencies": {
+    "@prisma/client": "7.8.0",
+    "jose": "^6.2.3",
+    "postgres": "^3.4.9",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "nx": "23.1.0",
+    "prisma": "7.8.0",
+    "tsx": "4.23.1",
+    "typescript": "7.0.2"
+  }
+}

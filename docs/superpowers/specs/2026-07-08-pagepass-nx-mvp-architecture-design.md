@@ -228,8 +228,8 @@ Child owns only the actions needed to earn and spend credit:
 * request child Screen Time authorization
 * pair this device to one child profile
 * run reading timer
-* capture handwritten report photo
-* run/show OCR
+* capture one or more handwritten book-report pages
+* run/show on-device OCR for Korean and English when supported at runtime
 * submit report
 * sync approved credit
 * enforce parent policy through Screen Time APIs
@@ -297,9 +297,9 @@ Runtime behavior:
    an expired active session. A session ID and idempotency key prevent duplicate
    spend.
 
-The 15-minute minimum is a tested product constraint for the current hardware,
-not a claim that every iOS release guarantees that exact minimum. Runtime
-registration is authoritative; failure leaves apps locked.
+The product minimum is five minutes. The control loop was originally proven at
+15 minutes and later passed shorter expiry checks; runtime registration remains
+authoritative, and any registration failure leaves apps locked.
 
 ## iOS Architecture Boundary
 
@@ -389,7 +389,7 @@ Backend is the source of truth for:
 * one-time child-device pairing sessions
 * child policies and policy versions
 * submissions
-* OCR text
+* immutable page-level raw OCR and optional corrected transcript
 * approval state
 * canonical credit ledger
 * Earned Time session records and settlements
@@ -495,8 +495,9 @@ BookReportSubmission
   reading_session_id
   book_title
   page_range
-  image_url
-  ocr_text
+  original_image_url
+  raw_ocr_text
+  corrected_ocr_text
   status: submitted | approved | rejected | rewrite_requested
   submitted_at
   reviewed_at
@@ -580,10 +581,11 @@ Child requests apps and parent classifies each managed app
 Child starts reading
 Child limited apps lock
 Child finishes reading
-Child captures handwritten report photo
-Vision OCR produces text
-Child submits photo + OCR text
-Parent reviews original photo + OCR text
+Child captures one or more handwritten report pages, not book pages
+Vision OCR attempts Korean and English transcription on every page
+Child optionally corrects the transcript
+Child submits original pages + OCR result, including explicit OCR failures
+Parent reviews original pages + raw/final transcript and edited status
 Parent approves
 Backend writes credit ledger earn row
 Child syncs balance snapshot
@@ -615,11 +617,17 @@ Do not build realtime collaboration in MVP.
 
 OCR is required for MVP but not trusted as proof.
 
-* Run Vision OCR on the child device after photo capture.
-* Upload original image and OCR text together.
-* Parent review always shows original image and OCR text.
-* UI copy says OCR may be imperfect.
-* AI review can be added later without changing approval authority.
+* The input is the child's handwritten book report, never photographed book content.
+* Capture one or more pages with VisionKit document scanning when the device supports it.
+* Run accurate Vision OCR on the child device after capture.
+* Ask Vision for its runtime-supported languages before preferring Korean and English.
+* OCR must be attempted for every page, but recognition failure must not block submission.
+* Preserve original page images immediately; freeze page-level raw OCR at submission.
+* OCR retries may replace raw OCR only while editable and must increment an OCR revision.
+* The child may optionally save a corrected transcript; never require a second typed report.
+* Parent review always shows original images, transcript, and whether it was edited.
+* Korean and English handwriting quality is a physical-device proof gate, not an assumed API guarantee.
+* AI scoring and auto-approval are deferred and cannot replace parent approval.
 
 ## Security And Privacy Rules
 
@@ -762,8 +770,8 @@ Build child reading submission and parent review.
 Exit criteria:
 
 ```text
-Child submits photo + OCR.
-Parent reviews original photo + OCR.
+Child submits one or more handwritten report pages after OCR is attempted.
+Parent reviews original pages, OCR transcript, and edited status.
 Parent approves.
 Backend creates earn ledger row.
 ```

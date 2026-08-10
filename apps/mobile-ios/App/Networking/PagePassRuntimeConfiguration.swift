@@ -2,16 +2,32 @@ import Foundation
 
 enum PagePassRuntimeConfiguration {
     private static let serverURLKey = "pagepass.serverURL"
-    private static let productionServerURL = "https://api.pagepass.app"
+    private static let localParentTokenKey = "pagepass.localParentToken"
+    private static let bundledServerURLKey = "PagePassAPIBaseURL"
+    private static let bundledLocalParentTokenKey = "PagePassLocalParentToken"
+
+    private static var bundledServerURL: String? {
+        bundledValue(for: bundledServerURLKey)
+    }
+
+    private static func bundledValue(for key: String) -> String? {
+        guard let value = Bundle.main.object(forInfoDictionaryKey: key) as? String else {
+            return nil
+        }
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, !trimmed.contains("$(") else { return nil }
+        return trimmed
+    }
 
     static var serverURLString: String {
         get {
 #if DEBUG
             ProcessInfo.processInfo.environment["PAGEPASS_SERVER_URL"]
                 ?? UserDefaults.standard.string(forKey: serverURLKey)
-                ?? "http://192.168.30.164:8787"
+                ?? bundledServerURL
+                ?? ""
 #else
-            productionServerURL
+            bundledServerURL ?? ""
 #endif
         }
         set {
@@ -22,7 +38,13 @@ enum PagePassRuntimeConfiguration {
     }
 
     static var parentToken: String? {
+#if DEBUG
         ProcessInfo.processInfo.environment["PAGEPASS_PARENT_TOKEN"]
+            ?? UserDefaults.standard.string(forKey: localParentTokenKey)
+            ?? bundledValue(for: bundledLocalParentTokenKey)
+#else
+        nil
+#endif
     }
 
     static func apiClient(serverURLString: String) throws -> PagePassAPIClient {
@@ -36,7 +58,7 @@ enum PagePassRuntimeConfiguration {
             throw PagePassAPIClient.ClientError.invalidServerURL
         }
 #else
-        guard scheme == "https", url.absoluteString == productionServerURL else {
+        guard scheme == "https" else {
             throw PagePassAPIClient.ClientError.invalidServerURL
         }
 #endif

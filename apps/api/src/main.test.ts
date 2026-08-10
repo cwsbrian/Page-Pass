@@ -186,8 +186,8 @@ test("snapshot server instance ID is stable per store and unique across stores",
 
 test("settlement contract enforces the wall-clock session envelope", () => {
   assert.throws(() => earnedTimeSettlementSchema.parse(settlement({
-    requestedDurationSeconds: 899,
-    expiresAt: "2026-07-17T12:14:59.000Z"
+    requestedDurationSeconds: 299,
+    expiresAt: "2026-07-17T12:04:59.000Z"
   })));
   assert.throws(() => earnedTimeSettlementSchema.parse(settlement({
     requestedDurationSeconds: 1_801,

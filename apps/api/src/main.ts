@@ -1,6 +1,8 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
+import { readFileSync } from "node:fs";
 import { isIP } from "node:net";
 import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { ZodError, type ZodType } from "zod";
 
@@ -39,7 +41,27 @@ import {
   parsePagePassAuthMode,
   type ParentIdentity
 } from "./parent-auth.js";
+import {
+  createBetterAuth,
+  createBetterAuthFastifyHandler
+} from "./auth/better-auth.js";
+import { parseApiEnv } from "./config/env.js";
+import { PrismaCreditService } from "./credit/credit-service.js";
+import { createPrismaClient } from "./db/prisma.js";
+import { createEmailSender } from "./email/send-email.js";
+import { PrismaFamilyService } from "./family/family-service.js";
+import { createBetterAuthParentApi } from "./family/parent-api.js";
+import { createFastifyServer } from "./fastify-server.js";
+import { PrismaAppAccessService } from "./app-access/app-access-service.js";
+import { loadRootEnv } from "./load-env.js";
+import { DataRetentionWorker } from "./operations/data-retention-worker.js";
+import { PrismaPairingService } from "./pairing/pairing-service.js";
 import { PostgresPagePassStore } from "./postgres-store.js";
+import { TokenApnsClient } from "./push/apns-client.js";
+import { PrismaPushNotificationService } from "./push/push-service.js";
+import { PrismaReadingService } from "./reading/reading-service.js";
+import { MediaDeletionWorker } from "./reading/media-deletion-worker.js";
+import { S3MediaStorage } from "./reading/media-storage.js";
 
 const maximumBodyBytes = 64 * 1_024;
 
@@ -93,13 +115,22 @@ export function createPagePassHttpServer(
   store: HttpPagePassStore,
   options: PagePassHttpServerOptions = {}
 ) {
-  return createServer(async (request, response) => {
-    try {
-      await routeRequest(store, request, response, options);
-    } catch (error) {
-      writeError(response, error);
-    }
-  });
+  return createServer((request, response) =>
+    handlePagePassRequest(store, request, response, options)
+  );
+}
+
+export async function handlePagePassRequest(
+  store: HttpPagePassStore,
+  request: IncomingMessage,
+  response: ServerResponse,
+  options: PagePassHttpServerOptions = {}
+): Promise<void> {
+  try {
+    await routeRequest(store, request, response, options);
+  } catch (error) {
+    writeError(response, error);
+  }
 }
 
 async function routeRequest(
@@ -428,7 +459,8 @@ function writeError(response: ServerResponse, error: unknown): void {
 }
 
 async function startFromEnvironment(): Promise<void> {
-  const authMode = parsePagePassAuthMode(process.env.PAGEPASS_AUTH_MODE);
+  const apiEnv = parseApiEnv(process.env);
+  const authMode = parsePagePassAuthMode(apiEnv.authMode);
   const trustProxy = parsePagePassTrustProxy(process.env.PAGEPASS_TRUST_PROXY);
   const trustedProxyAddresses = trustProxy
     ? parsePagePassTrustedProxyAddresses(
@@ -446,11 +478,6 @@ async function startFromEnvironment(): Promise<void> {
   if (pepper === undefined || pepper.length === 0) {
     throw new Error("PAGEPASS_SERVER_PEPPER is required");
   }
-  const databaseUrl = process.env.DATABASE_URL;
-  if (databaseUrl === undefined || databaseUrl.length === 0) {
-    throw new Error("DATABASE_URL is required");
-  }
-
   const portText = process.env.PAGEPASS_PORT ?? "8787";
   const port = Number(portText);
   if (!Number.isInteger(port) || port < 1 || port > 65_535) {
@@ -458,7 +485,7 @@ async function startFromEnvironment(): Promise<void> {
   }
 
   const store = await PostgresPagePassStore.create({
-    databaseUrl,
+    databaseUrl: apiEnv.databaseUrl,
     parentToken,
     pepper,
     authMode,
@@ -468,16 +495,134 @@ async function startFromEnvironment(): Promise<void> {
       )
     })
   });
-  const server = createPagePassHttpServer(store, { trustedProxyAddresses });
-  await new Promise<void>((resolve, reject) => {
-    server.once("error", reject);
-    server.listen(port, "0.0.0.0", resolve);
+  const prisma = createPrismaClient(apiEnv.databaseUrl);
+  const sendEmail = createEmailSender({
+    apiKey: apiEnv.resendApiKey,
+    from: apiEnv.emailFrom,
+    environment: apiEnv.nodeEnv
   });
-  console.log(`PagePass API listening on http://0.0.0.0:${port}`);
+  const auth = createBetterAuth({ prisma, env: apiEnv, sendEmail });
+  const pairing = new PrismaPairingService(prisma, {
+    pepper,
+    legacy: store
+  });
+  const credit = new PrismaCreditService(prisma, {
+    pepper,
+    legacy: store
+  });
+  const appAccess = new PrismaAppAccessService(prisma, { pepper });
+  const mediaStorage = apiEnv.mediaStorage === undefined
+    ? undefined
+    : new S3MediaStorage({
+        ...apiEnv.mediaStorage,
+        createBucketIfMissing: apiEnv.nodeEnv !== "production"
+      });
+  await mediaStorage?.ensureReady();
+  const reading = new PrismaReadingService(prisma, { pepper, mediaStorage });
+  const mediaDeletion = mediaStorage === undefined
+    ? undefined
+    : new MediaDeletionWorker(prisma, mediaStorage, {
+        onError: (error) => logBackgroundError("media-deletion-worker", error)
+      });
+  const push = new PrismaPushNotificationService(prisma, {
+    pepper,
+    onError: (error) => logBackgroundError("push-worker", error),
+    ...(apiEnv.apns === undefined ? {} : {
+      sender: new TokenApnsClient({
+        privateKey: readFileSync(apiEnv.apns.privateKeyPath, "utf8"),
+        keyId: apiEnv.apns.keyId,
+        teamId: apiEnv.apns.teamId,
+        topic: apiEnv.apns.topic
+      })
+    })
+  });
+  const retention = new DataRetentionWorker(prisma, {
+    onError: (error) => logBackgroundError("data-retention-worker", error)
+  });
+  const families = new PrismaFamilyService(prisma, {
+    legacyMigrationPepper: pepper
+  });
+  const parentApi = createBetterAuthParentApi({
+    auth,
+    families,
+    pairing,
+    ...(
+      apiEnv.nodeEnv === "development" &&
+      (authMode === "local" || authMode === "hybrid") &&
+      parentToken !== undefined
+        ? {
+            localDevelopmentParent: {
+              token: parentToken,
+              id: "pagepass-local-development-parent",
+              name: "Local Parent",
+              email: "local-parent@pagepass.test"
+            }
+          }
+        : {}
+    )
+  });
+  const server = createFastifyServer({
+    trustedOrigins: apiEnv.trustedOrigins,
+    authHandler: createBetterAuthFastifyHandler(auth),
+    parentApi,
+    pairingApi: pairing,
+    creditApi: credit,
+    appAccessApi: appAccess,
+    readingApi: reading,
+    pushApi: push,
+    trustedProxyAddresses,
+    readiness: async () => {
+      await prisma.$queryRaw`SELECT 1`;
+      await mediaStorage?.ensureReady();
+    },
+    legacyHandler: (request, response) =>
+      handlePagePassRequest(store, request, response, { trustedProxyAddresses })
+  });
+  server.addHook("onClose", async () => {
+    mediaDeletion?.close();
+    push.close();
+    retention.close();
+    await prisma.$disconnect();
+    await store.close();
+  });
+  let closing = false;
+  const shutdown = (signal: NodeJS.Signals) => {
+    if (closing) return;
+    closing = true;
+    server.log.info({ signal }, "graceful shutdown started");
+    void server.close().catch((error: unknown) => {
+      server.log.error({ err: error }, "graceful shutdown failed");
+      process.exitCode = 1;
+    });
+  };
+  const onSigterm = () => shutdown("SIGTERM");
+  const onSigint = () => shutdown("SIGINT");
+  server.addHook("onClose", async () => {
+    process.off("SIGTERM", onSigterm);
+    process.off("SIGINT", onSigint);
+  });
+  await push.start();
+  await mediaDeletion?.start();
+  retention.start();
+  await server.listen({ port, host: "0.0.0.0" });
+  process.once("SIGTERM", onSigterm);
+  process.once("SIGINT", onSigint);
+}
+
+function logBackgroundError(component: string, error: unknown): void {
+  console.error(JSON.stringify({
+    level: "error",
+    component,
+    message: error instanceof Error ? error.message : "Background worker failed"
+  }));
 }
 
 const entrypoint = process.argv[1];
-if (entrypoint !== undefined && resolve(entrypoint) === __filename) {
+if (
+  entrypoint !== undefined &&
+  resolve(entrypoint) === fileURLToPath(import.meta.url)
+) {
+  loadRootEnv();
   startFromEnvironment().catch((error: unknown) => {
     console.error(error instanceof Error ? error.message : error);
     process.exitCode = 1;

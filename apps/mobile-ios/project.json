@@ -21,10 +21,24 @@
     },
     "test": {
       "executor": "nx:run-commands",
+      "dependsOn": ["generate"],
       "options": {
-        "command": "swift test --package-path apps/mobile-ios/Packages/PagePassCore"
+        "command": "node scripts/test-ios.mjs"
+      }
+    },
+    "release-verify": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["generate"],
+      "outputs": ["{workspaceRoot}/.build/PagePassReleaseVerification"],
+      "options": {
+        "command": "node scripts/verify-ios-release.mjs"
+      }
+    },
+    "archive-verify": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/verify-ios-archive.mjs"
       }
     }
   }
 }
-

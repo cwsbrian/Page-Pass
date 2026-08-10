@@ -1,0 +1,917 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@  |  %@  |  %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@  |  %2$@  |  %3$@"
+          }
+        }
+      }
+    },
+    "%lld devices need attention" : {
+
+    },
+    "%lld pages" : {
+
+    },
+    "%lld pending requests" : {
+
+    },
+    "%lld requests waiting" : {
+
+    },
+    "15 min" : {
+
+    },
+    "15m" : {
+
+    },
+    "1h" : {
+
+    },
+    "30 min" : {
+
+    },
+    "30m" : {
+
+    },
+    "5 min" : {
+
+    },
+    "6-digit code" : {
+
+    },
+    "60 min" : {
+
+    },
+    "A parent disconnected this device." : {
+
+    },
+    "About" : {
+
+    },
+    "Account" : {
+
+    },
+    "Active" : {
+
+    },
+    "Active until %@" : {
+
+    },
+    "Activity" : {
+
+    },
+    "Add" : {
+
+    },
+    "Add Time" : {
+
+    },
+    "Add Time for %@" : {
+
+    },
+    "Add child" : {
+
+    },
+    "All" : {
+
+    },
+    "All Children" : {
+
+    },
+    "Allow" : {
+
+    },
+    "Always Allowed" : {
+
+    },
+    "Amount" : {
+
+    },
+    "Another parent keeps access to a shared family. Active Earned Time must be stopped before the last parent can delete the account." : {
+
+    },
+    "App" : {
+
+    },
+    "App Requests" : {
+
+    },
+    "Approve" : {
+
+    },
+    "Approved" : {
+
+    },
+    "Approved with Data Access" : {
+
+    },
+    "Apps" : {
+
+    },
+    "Ask Parent" : {
+
+    },
+    "Author" : {
+
+    },
+    "Authorization" : {
+
+    },
+    "Authorize This Child Device" : {
+
+    },
+    "Balance" : {
+
+    },
+    "Balance %@" : {
+
+    },
+    "Balance History" : {
+
+    },
+    "Balance Updated" : {
+
+    },
+    "Balance afterward" : {
+
+    },
+    "Blocked" : {
+
+    },
+    "Book" : {
+
+    },
+    "Book title" : {
+
+    },
+    "Build" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Capture" : {
+
+    },
+    "Changes" : {
+
+    },
+    "Characters" : {
+
+    },
+    "Child" : {
+
+    },
+    "Child name" : {
+
+    },
+    "Child pairing QR code" : {
+
+    },
+    "Children" : {
+
+    },
+    "Children can also choose Max to use their full balance." : {
+
+    },
+    "Choose Existing Photos" : {
+
+    },
+    "Choose Managed Apps" : {
+
+    },
+    "Choose New Pages" : {
+
+    },
+    "Clear OCR run" : {
+
+    },
+    "Clear reading report" : {
+
+    },
+    "Comment" : {
+
+    },
+    "Complete Setup" : {
+
+    },
+    "Completed" : {
+
+    },
+    "Confidence" : {
+
+    },
+    "Confirm authorization says Approved on the child device." : {
+
+    },
+    "Confirm both devices have internet access." : {
+
+    },
+    "Confirmation" : {
+
+    },
+    "Connect" : {
+
+    },
+    "Connect Child" : {
+
+    },
+    "Connect Replacement" : {
+
+    },
+    "Connect this device to a parent account." : {
+
+    },
+    "Connected" : {
+
+    },
+    "Connection" : {
+
+    },
+    "Continue in Earn" : {
+
+    },
+    "Create Account" : {
+
+    },
+    "Create Revised Report" : {
+
+    },
+    "Created" : {
+
+    },
+    "Custom" : {
+
+    },
+    "Decided" : {
+
+    },
+    "Decision" : {
+
+    },
+    "Default Reward" : {
+
+    },
+    "Delete Account" : {
+
+    },
+    "Delete Draft" : {
+
+    },
+    "Delete this draft?" : {
+
+    },
+    "Denied" : {
+
+    },
+    "Deny" : {
+
+    },
+    "Device" : {
+
+    },
+    "Device Alerts" : {
+
+    },
+    "Device Diagnostics" : {
+
+    },
+    "Devices" : {
+
+    },
+    "Diagnostics" : {
+
+    },
+    "Discard Report" : {
+
+    },
+    "Discard this unfinished report?" : {
+
+    },
+    "Document Camera" : {
+
+    },
+    "Done" : {
+
+    },
+    "Duration" : {
+
+    },
+    "Earn" : {
+
+    },
+    "Earn Time" : {
+
+    },
+    "Earned" : {
+
+    },
+    "Earned Time" : {
+
+    },
+    "Earned Time Choices" : {
+
+    },
+    "Earned Time Ended" : {
+
+    },
+    "Earned Time Policy" : {
+
+    },
+    "Earned Time Used" : {
+
+    },
+    "Earned Time and Rewards" : {
+
+    },
+    "Earned Time remaining" : {
+
+    },
+    "Edited" : {
+
+    },
+    "Edited Transcript" : {
+
+    },
+    "Email" : {
+
+    },
+    "Ended" : {
+
+    },
+    "Ends at" : {
+
+    },
+    "English" : {
+
+    },
+    "Expires %@" : {
+
+    },
+    "Failed" : {
+
+    },
+    "Family" : {
+
+    },
+    "Family Settings" : {
+
+    },
+    "Finish device setup to use Earned Time." : {
+
+    },
+    "Forgot Password?" : {
+
+    },
+    "Handwritten Report" : {
+
+    },
+    "Home" : {
+
+    },
+    "Image Unavailable" : {
+
+    },
+    "Import" : {
+
+    },
+    "Import Family" : {
+
+    },
+    "Import Previous Family" : {
+
+    },
+    "Journal" : {
+
+    },
+    "Keep PagePass installed so scheduled restrictions can be applied." : {
+
+    },
+    "Keep Using" : {
+
+    },
+    "Korean" : {
+
+    },
+    "Languages" : {
+
+    },
+    "Last Sync" : {
+
+    },
+    "Last sync %@" : {
+
+    },
+    "Last updated: August 6, 2026" : {
+
+    },
+    "Ledger Revision" : {
+
+    },
+    "Legal" : {
+
+    },
+    "Lines" : {
+
+    },
+    "Load 15 Minutes" : {
+
+    },
+    "Load 30 Minutes" : {
+
+    },
+    "Load More" : {
+
+    },
+    "Loading device status" : {
+
+    },
+    "Locked" : {
+
+    },
+    "Low Confidence" : {
+
+    },
+    "Managed Apps" : {
+
+    },
+    "Max" : {
+
+    },
+    "Max - %@" : {
+
+    },
+    "Minutes" : {
+
+    },
+    "More" : {
+
+    },
+    "Name" : {
+
+    },
+    "Needs Attention" : {
+
+    },
+    "New Child" : {
+
+    },
+    "New Password" : {
+
+    },
+    "New balance" : {
+
+    },
+    "No Balance Activity" : {
+
+    },
+    "No Child Profiles" : {
+
+    },
+    "No Connected Devices" : {
+
+    },
+    "No Managed Apps" : {
+
+    },
+    "No Matching Requests" : {
+
+    },
+    "No Pending Reports" : {
+
+    },
+    "No Pending Requests" : {
+
+    },
+    "No apps synced" : {
+
+    },
+    "No text recognized" : {
+
+    },
+    "Not Connected" : {
+
+    },
+    "Not Determined" : {
+
+    },
+    "Not Paired" : {
+
+    },
+    "Not connected" : {
+
+    },
+    "Notifications" : {
+
+    },
+    "OCR Revision" : {
+
+    },
+    "OCR Time" : {
+
+    },
+    "Open Device Setup" : {
+
+    },
+    "Open PagePass and use Sync when a recent change is missing." : {
+
+    },
+    "Original pages remain in the local draft when upload fails." : {
+
+    },
+    "Page %lld" : {
+
+    },
+    "Page Unavailable" : {
+
+    },
+    "PagePass" : {
+
+    },
+    "PagePass %@ (%@)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "PagePass %1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "PagePass on this device will lose access. Active Earned Time must be stopped and synced first." : {
+
+    },
+    "Pages" : {
+
+    },
+    "Parent" : {
+
+    },
+    "Parent Account" : {
+
+    },
+    "Parent Added Time" : {
+
+    },
+    "Parent Adjustment" : {
+
+    },
+    "Parent Connection" : {
+
+    },
+    "Parent Review" : {
+
+    },
+    "Parent added time" : {
+
+    },
+    "Password" : {
+
+    },
+    "Pending" : {
+
+    },
+    "Pending Parent Review" : {
+
+    },
+    "Pending Settlements" : {
+
+    },
+    "Policy" : {
+
+    },
+    "Policy Version" : {
+
+    },
+    "Previous parent token" : {
+
+    },
+    "Privacy Policy" : {
+
+    },
+    "Privacy and Support" : {
+
+    },
+    "Quick Actions" : {
+
+    },
+    "Reading" : {
+
+    },
+    "Reading Approval" : {
+
+    },
+    "Reading Report" : {
+
+    },
+    "Reading Reports" : {
+
+    },
+    "Reading Reward" : {
+
+    },
+    "Ready" : {
+
+    },
+    "Reason" : {
+
+    },
+    "Recognizing" : {
+
+    },
+    "Refresh" : {
+
+    },
+    "Refresh app access" : {
+
+    },
+    "Reject" : {
+
+    },
+    "Rejected" : {
+
+    },
+    "Remaining" : {
+
+    },
+    "Remaining credit" : {
+
+    },
+    "Removes the scanned pages and OCR text" : {
+
+    },
+    "Replace Handwritten Pages" : {
+
+    },
+    "Replace Pages and Resubmit" : {
+
+    },
+    "Replaced" : {
+
+    },
+    "Report Unavailable" : {
+
+    },
+    "Request Changes" : {
+
+    },
+    "Requests" : {
+
+    },
+    "Resend Verification Email" : {
+
+    },
+    "Reset Device" : {
+
+    },
+    "Reset Password" : {
+
+    },
+    "Reset Revoked Device" : {
+
+    },
+    "Reset this PagePass installation?" : {
+
+    },
+    "Resolved" : {
+
+    },
+    "Restore Raw OCR" : {
+
+    },
+    "Resubmit for Review" : {
+
+    },
+    "Retry OCR" : {
+
+    },
+    "Retry Page Replacement" : {
+
+    },
+    "Retry Upload" : {
+
+    },
+    "Retry unfinished OCR or upload from the saved draft." : {
+
+    },
+    "Review" : {
+
+    },
+    "Review History" : {
+
+    },
+    "Review Report" : {
+
+    },
+    "Reviewed" : {
+
+    },
+    "Revoke %@" : {
+
+    },
+    "Revoke Device" : {
+
+    },
+    "Revoke this device?" : {
+
+    },
+    "Revoked" : {
+
+    },
+    "Revoked Device" : {
+
+    },
+    "Reward" : {
+
+    },
+    "Run Summary" : {
+
+    },
+    "Save Settings" : {
+
+    },
+    "Save, Lock and Sync" : {
+
+    },
+    "Save, lock, and sync again after changing managed apps." : {
+
+    },
+    "Scan Handwritten Report" : {
+
+    },
+    "Scan Parent QR" : {
+
+    },
+    "Scanned report page %lld" : {
+
+    },
+    "Screen Time" : {
+
+    },
+    "Screen Time Verification" : {
+
+    },
+    "Selected" : {
+
+    },
+    "Send" : {
+
+    },
+    "Server" : {
+
+    },
+    "Server URL" : {
+
+    },
+    "Session" : {
+
+    },
+    "Setup Required" : {
+
+    },
+    "Setup required" : {
+
+    },
+    "Share Diagnostics" : {
+
+    },
+    "Sign In" : {
+
+    },
+    "Sign Out" : {
+
+    },
+    "Sign out of PagePass?" : {
+
+    },
+    "Start %@" : {
+
+    },
+    "Starting" : {
+
+    },
+    "Status" : {
+
+    },
+    "Stop & Lock" : {
+
+    },
+    "Stop Earned Time?" : {
+
+    },
+    "Stop the current session before changing devices or account access." : {
+
+    },
+    "Stopping" : {
+
+    },
+    "Submit Reading Report" : {
+
+    },
+    "Submit for Review" : {
+
+    },
+    "Submitted" : {
+
+    },
+    "Succeeded" : {
+
+    },
+    "Summary" : {
+
+    },
+    "Support" : {
+
+    },
+    "Sync" : {
+
+    },
+    "Sync Now" : {
+
+    },
+    "Sync Pending" : {
+
+    },
+    "Sync Required" : {
+
+    },
+    "Syncing" : {
+
+    },
+    "Terms of Use" : {
+
+    },
+    "The saved pages and server draft will be removed." : {
+
+    },
+    "The uploaded pages and saved recovery data will be removed." : {
+
+    },
+    "This permanently deletes your parent account. If you are the last parent, PagePass also disconnects the children's devices and removes their personal reading data." : {
+
+    },
+    "This removes the revoked connection and PagePass restrictions from this device." : {
+
+    },
+    "Time" : {
+
+    },
+    "Timeline" : {
+
+    },
+    "Title" : {
+
+    },
+    "Transcript" : {
+
+    },
+    "Troubleshooting" : {
+
+    },
+    "Type" : {
+
+    },
+    "Type DELETE" : {
+
+    },
+    "Unavailable App" : {
+
+    },
+    "Unfinished Report" : {
+
+    },
+    "Unknown" : {
+
+    },
+    "Unlocks" : {
+
+    },
+    "Update" : {
+
+    },
+    "Use Earned Time" : {
+
+    },
+    "Used" : {
+
+    },
+    "Version" : {
+
+    },
+    "Vision Revision" : {
+
+    },
+    "Waiting for Parent" : {
+
+    },
+    "Why are you adding time?" : {
+
+    }
+  },
+  "version" : "1.0"
+}

@@ -47,6 +47,7 @@ async function resetDatabase(url: string): Promise<void> {
         earned_time_spends,
         credit_grants,
         active_devices,
+        legacy_pairing_sessions,
         pairing_sessions,
         children,
         server_state
@@ -164,7 +165,24 @@ test(
             "20260717121000_parent_auth",
             "20260717122000_adversarial_hardening",
             "20260717123000_local_data_claim_state",
-            "20260717124000_prisma_identity"
+            "20260717124000_prisma_identity",
+            "20260727120000_better_auth_foundation",
+            "20260727130000_family_child_device_foundation",
+            "20260727140000_pairing_device_credentials",
+            "20260727150000_credit_ledger_sessions",
+            "20260729120000_managed_app_policy_flow",
+            "20260729130000_managed_app_active_uniqueness",
+            "20260804235000_parent_push_notifications",
+            "20260805002000_push_outbox_failed_state",
+            "20260806113000_reading_submission_foundation",
+            "20260806123000_reading_review_invariants",
+            "20260806160000_child_push_notifications",
+            "20260806190000_account_deletion_media_jobs",
+            "20260806200000_family_preferences",
+            "20260806203000_five_minute_sessions",
+            "20260806204000_grandfather_spike_sessions",
+            "20260806210000_parent_notification_preferences",
+            "20260806220000_legacy_family_claim"
           ]
         );
       } finally {

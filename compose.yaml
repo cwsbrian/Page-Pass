@@ -9,6 +9,7 @@ services:
       - "127.0.0.1:${PAGEPASS_DB_PORT:-54329}:5432"
     volumes:
       - pagepass-postgres-data:/var/lib/postgresql/data
+      - ./scripts/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
@@ -17,5 +18,19 @@ services:
       start_period: 5s
     restart: unless-stopped
 
+  minio:
+    image: quay.io/minio/minio:RELEASE.2025-07-23T15-54-02Z
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${PAGEPASS_S3_ACCESS_KEY:-pagepass-local}
+      MINIO_ROOT_PASSWORD: ${PAGEPASS_S3_SECRET_KEY:?PAGEPASS_S3_SECRET_KEY is required}
+    ports:
+      - "${PAGEPASS_S3_PORT:-9010}:9000"
+      - "127.0.0.1:${PAGEPASS_S3_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - pagepass-minio-data:/data
+    restart: unless-stopped
+
 volumes:
   pagepass-postgres-data:
+  pagepass-minio-data:

@@ -7,13 +7,13 @@ import Testing
 struct EarnedTimeReducerTests {
     private let start = Date(timeIntervalSince1970: 1_000)
 
-    @Test("Requires the tested 15-minute minimum")
+    @Test("Requires the configured five-minute minimum")
     func rejectsShortDuration() {
         var state = EarnedTimeState(balanceSeconds: 3_600)
 
         #expect(throws: EarnedTimeReducerError.durationBelowMinimum) {
             try EarnedTimeReducer.reduce(
-                .prepareSession(id: UUID(), durationSeconds: 899, startedAt: start),
+                .prepareSession(id: UUID(), durationSeconds: 299, startedAt: start),
                 state: &state
             )
         }

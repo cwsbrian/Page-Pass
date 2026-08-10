@@ -2,6 +2,7 @@ node_modules/
 .nx/
 dist/
 .build/
+.env
 idb-*/
 apps/api/src/generated/prisma/
 /docs/manual-tests/evidence/
@@ -12,3 +13,4 @@ apps/api/src/generated/prisma/
 apps/mobile-ios/PagePass.xcodeproj/
 spikes/*
 .DS_Store
+AuthKey_*.p8

@@ -234,7 +234,7 @@ Balance afterward   14m 10s
 
 규칙:
 
-- 최소 session은 검증된 15분이다.
+- 최소 session은 5분이며 Parent가 5/15/30/60분 중 노출할 preset을 설정한다.
 - 잔액보다 큰 preset은 disabled다.
 - `Max`는 현재 사용 가능한 전체 잔액을 명시적으로 선택한다.
 - 선택하지 않는다는 별도 옵션은 없다.
@@ -302,7 +302,9 @@ Remaining credit 18m 58s
 
 ### Child Earn
 
-새 독서 활동과 OCR 제출을 만드는 탭이다.
+손글씨 독후감을 촬영하고 OCR transcript와 함께 제출하는 탭이다. 책 본문이나
+읽은 페이지를 촬영하는 기능이 아니며, 별도의 typed report를 다시 작성하게 하지
+않는다.
 
 화면 구성:
 
@@ -317,18 +319,20 @@ Remaining credit 18m 58s
 ```mermaid
 flowchart TD
     A["새 독후감"] --> B["책 정보 입력 또는 선택"]
-    B --> C["페이지 촬영"]
-    C --> D["이미지 검토"]
-    D --> E["OCR 처리"]
-    E --> F["OCR 결과 검토"]
-    F --> G["독후감 작성"]
-    G --> H["제출 확인"]
-    H --> I["Parent review 대기"]
+    B --> C["손글씨 독후감 촬영"]
+    C --> D["페이지 검토·재촬영·순서 변경"]
+    D --> E["기기 내 OCR 처리"]
+    E --> F["OCR transcript 검토·선택적 교정"]
+    F --> G["제출 확인"]
+    G --> H["Parent review 대기"]
 ```
 
-OCR은 필수지만 AI 평가는 보조 기능이다. Parent가 최종 승인과 reward를 결정한다.
+OCR 시도는 필수지만 인식 성공은 제출 조건이 아니다. 원본 손글씨 이미지가 source
+of truth이며, OCR이 일부 또는 전부 실패해도 원본을 제출할 수 있다. OCR 교정은
+선택 사항이고 교정 여부를 Parent에게 표시한다. AI 평가는 MVP 범위 밖이며 Parent가
+최종 승인과 reward를 결정한다.
 
-Draft는 가능한 빨리 child profile의 cloud draft로 저장해 device 교체 시 복구할 수 있게 한다. 이미지 upload 실패와 OCR 실패는 독후감 작성 내용을 잃게 만들면 안 된다.
+Draft는 가능한 빨리 child profile의 cloud draft로 저장해 device 교체 시 복구할 수 있게 한다. 이미지 upload 실패와 OCR 실패는 이미 촬영한 원본이나 OCR 결과를 잃게 만들면 안 된다.
 
 ### Child Journal
 
@@ -340,7 +344,7 @@ List item:
 
 - 책 표지 또는 page thumbnail
 - 책 제목
-- 독후감 일부
+- OCR transcript 일부, 없으면 `Handwritten report`
 - 작성/제출 날짜
 - status
 - 획득 시간
@@ -367,8 +371,8 @@ Rejected
 섹션:
 
 - Book: title, author, cover
-- My Report: child-written report
-- Reading Evidence: captured pages and OCR text
+- Handwritten Report: ordered original page images
+- Transcript: page-ordered raw OCR, optional corrected OCR와 edited 표시
 - Parent Review: status, comment, reward
 - Timeline: created, submitted, reviewed dates
 
@@ -628,9 +632,8 @@ Child Journal과 같은 submission을 Parent 관점으로 렌더링한다.
 섹션:
 
 - Book
-- Reading Evidence
-- OCR Text
-- Child Report
+- Handwritten Report: ordered original page images
+- Transcript: raw OCR, optional corrected OCR와 edited 표시
 - Review History
 - Reward
 - Timeline
@@ -671,6 +674,11 @@ Support
 ```
 
 Child profile 삭제보다 `Archive Child`를 우선한다. ledger와 Journal을 실수로 삭제하지 않게 한다.
+Manage Children은 active child와 archived child를 별도 section으로 표시한다.
+Archived child detail은 archive date, remaining balance, immutable Time History,
+Reading Reports와 원본 handwritten evidence를 읽기 전용으로 제공한다. Pending
+상태로 archive된 report에도 Approve, Request Changes, Reject control을 표시하지
+않으며, archived child는 Home, Requests, Journal의 active dashboard에 포함하지 않는다.
 
 ## Device Pairing And Replacement
 
@@ -806,17 +814,16 @@ This update will sync when the device is online
 5. Use Earned Time Sheet
 6. Stop Confirmation Sheet
 7. Earn Landing
-8. Capture Pages
-9. Image Review
-10. OCR Review
-11. Report Editor
-12. Submission Confirmation
-13. Journal List
-14. Journal Detail
-15. App Request Picker/Confirmation
-16. My App Access
-17. Device Status
-18. More
+8. Handwritten Report Capture
+9. Page Review
+10. OCR Transcript Review
+11. Submission Confirmation
+12. Journal List
+13. Journal Detail
+14. App Request Picker/Confirmation
+15. My App Access
+16. Device Status
+17. More
 
 ### Parent
 
@@ -1045,7 +1052,7 @@ Deep Green background
 5. 양쪽 Journal List/Detail
 6. Child pairing 및 authorization recovery
 7. Parent Child Detail과 device replacement
-8. OCR capture/review/editor
+8. Handwritten report capture/OCR review
 9. More와 account/settings
 10. 모든 empty/offline/error/sync states
 

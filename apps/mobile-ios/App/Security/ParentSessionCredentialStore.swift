@@ -20,14 +20,14 @@ actor ParentSessionCredentialStore {
     private let sessionAccount = "session-token"
     private let appleUserAccount = "apple-user-id"
     private let pendingRevocationAccount = "pending-revocation-token"
+    private let pendingRevocationKindAccount = "pending-revocation-kind"
 
-    func save(sessionToken: String, appleUserID: String) throws {
+    func save(sessionToken: String) throws {
         do {
             try save(Data(sessionToken.utf8), account: sessionAccount)
-            try save(Data(appleUserID.utf8), account: appleUserAccount)
+            try delete(account: appleUserAccount)
         } catch {
             try? delete(account: sessionAccount)
-            try? delete(account: appleUserAccount)
             throw error
         }
     }
@@ -36,23 +36,31 @@ actor ParentSessionCredentialStore {
         try load(account: sessionAccount)
     }
 
-    func loadAppleUserID() throws -> String? {
-        try load(account: appleUserAccount)
-    }
-
     func loadPendingRevocationToken() throws -> String? {
         try load(account: pendingRevocationAccount)
+    }
+
+    func usesLegacyAppleSession() throws -> Bool {
+        try load(account: appleUserAccount) != nil
+    }
+
+    func pendingRevocationUsesLegacySession() throws -> Bool {
+        // Pending revocations created by older builds can only be Apple sessions.
+        try load(account: pendingRevocationKindAccount) != "better-auth"
     }
 
     func moveSessionToPendingRevocation() throws {
         guard let token = try load(account: sessionAccount) else { return }
         try save(Data(token.utf8), account: pendingRevocationAccount)
+        let kind = try usesLegacyAppleSession() ? "legacy-apple" : "better-auth"
+        try save(Data(kind.utf8), account: pendingRevocationKindAccount)
         try delete(account: sessionAccount)
         try delete(account: appleUserAccount)
     }
 
     func clearPendingRevocation() throws {
         try delete(account: pendingRevocationAccount)
+        try delete(account: pendingRevocationKindAccount)
     }
 
     func delete() throws {

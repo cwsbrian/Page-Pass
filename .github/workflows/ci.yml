@@ -1,0 +1,119 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api:
+    name: API, PostgreSQL, and container
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:17.10-alpine
+        env:
+          POSTGRES_DB: pagepass_test
+          POSTGRES_USER: pagepass
+          POSTGRES_PASSWORD: pagepass-ci-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U pagepass -d pagepass_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://pagepass:pagepass-ci-password@127.0.0.1:5432/pagepass_test
+      TEST_DATABASE_URL: postgresql://pagepass:pagepass-ci-password@127.0.0.1:5432/pagepass_test
+      BETTER_AUTH_SECRET: pagepass-ci-better-auth-secret-32-characters
+      BETTER_AUTH_URL: http://127.0.0.1:8787
+      BETTER_AUTH_TRUSTED_ORIGINS: pagepass://auth
+      EMAIL_FROM: PagePass <no-reply@example.com>
+      S3_ENDPOINT: http://127.0.0.1:9000
+      S3_REGION: us-east-1
+      S3_BUCKET: pagepass-ci-media
+      S3_ACCESS_KEY_ID: pagepass-ci
+      S3_SECRET_ACCESS_KEY: pagepass-ci-storage-password
+      S3_FORCE_PATH_STYLE: "true"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Start private media storage
+        run: >-
+          docker run --detach --rm --name pagepass-ci-minio
+          --publish 9000:9000
+          --env MINIO_ROOT_USER=pagepass-ci
+          --env MINIO_ROOT_PASSWORD=pagepass-ci-storage-password
+          quay.io/minio/minio:RELEASE.2025-07-23T15-54-02Z
+          server /data
+      - name: Wait for private media storage
+        run: |
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:9000/minio/health/ready >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs pagepass-ci-minio
+          exit 1
+      - name: Validate schema and apply migrations
+        run: |
+          pnpm exec nx run api:prisma-validate --skip-nx-cache
+          pnpm exec nx run api:migrate-deploy --skip-nx-cache
+          pnpm ops:check
+      - name: Build and unit test API
+        run: |
+          pnpm exec nx run api:build --skip-nx-cache
+          pnpm exec nx run api:test --skip-nx-cache
+      - name: Run PostgreSQL integration suites sequentially
+        run: |
+          pnpm exec nx run api:integration-test --skip-nx-cache
+          pnpm exec nx run api:auth-integration-test --skip-nx-cache
+          pnpm exec nx run api:better-auth-integration-test --skip-nx-cache
+          pnpm exec nx run api:family-integration-test --skip-nx-cache
+          pnpm exec nx run api:legacy-family-claim-integration-test --skip-nx-cache
+          pnpm exec nx run api:credit-integration-test --skip-nx-cache
+          pnpm exec nx run api:app-access-integration-test --skip-nx-cache
+          pnpm exec nx run api:reading-integration-test --skip-nx-cache
+          pnpm exec nx run api:adversarial-integration-test --skip-nx-cache
+      - name: Verify S3-compatible storage
+        run: pnpm exec nx run api:media-storage-integration-test --skip-nx-cache
+      - name: Build production container
+        run: docker build --tag pagepass-api:ci .
+
+  ios:
+    name: iOS tests and Release verification
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - name: Select stable Xcode
+        run: sudo xcode-select --switch /Applications/Xcode_26.4.1.app/Contents/Developer
+      - name: Install dependencies
+        run: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+          pnpm install --frozen-lockfile
+      - name: Test iOS product
+        run: pnpm exec nx run mobile-ios:test --skip-nx-cache
+      - name: Verify iOS Release bundle
+        run: pnpm exec nx run mobile-ios:release-verify --skip-nx-cache

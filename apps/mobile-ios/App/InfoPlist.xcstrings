@@ -1,0 +1,28 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "NSCameraUsageDescription" : {
+      "comment" : "Privacy prompt shown before scanning pairing codes or handwritten reading reports.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scan pairing codes and handwritten book reports."
+          }
+        }
+      }
+    },
+    "NSLocalNetworkUsageDescription" : {
+      "comment" : "Privacy prompt used by development builds that connect to a local PagePass API.",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PagePass connects to the development server on your local network."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

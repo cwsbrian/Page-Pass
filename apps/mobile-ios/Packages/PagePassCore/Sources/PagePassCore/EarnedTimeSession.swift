@@ -1,13 +1,15 @@
 import Foundation
 
 public enum EarnedTimeSessionRules {
-    public static let minimumDurationSeconds = 15 * 60
+    public static let minimumDurationSeconds = 5 * 60
+    public static let maximumDurationSeconds = 24 * 60 * 60
 }
 
 public enum EarnedTimeSessionEndReason: String, Codable, Equatable, Sendable {
     case manualStop = "manual_stop"
     case expired
     case recovery
+    case activationFailed = "activation_failed"
 }
 
 public struct EarnedTimeSettlement: Codable, Equatable, Identifiable, Sendable {
@@ -116,4 +118,3 @@ public struct EarnedTimeState: Codable, Equatable, Sendable {
         return max(0, balanceSeconds - session.requestedDurationSeconds)
     }
 }
-

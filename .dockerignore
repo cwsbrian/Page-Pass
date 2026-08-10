@@ -1,0 +1,15 @@
+.git
+.build
+.nx
+dist
+node_modules
+.env
+.env.*
+!.env.example
+AuthKey_*.p8
+apps/mobile-ios
+docs/manual-tests/evidence
+spikes
+*.xcuserstate
+**/xcuserdata
+**/DerivedData

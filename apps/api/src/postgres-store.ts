@@ -65,6 +65,8 @@ interface ServerStateRow {
   ledger_revision: string | number;
   local_data_claimed_parent_id: string | null;
   local_data_claimed_children: number | null;
+  local_data_migrated_family_id: string | null;
+  local_data_migrated_children: number | null;
 }
 
 interface ChildRow {
@@ -556,6 +558,7 @@ export class PostgresPagePassStore {
 
     return this.sql.begin(async (transaction) => {
       const state = await lockServerState(transaction);
+      assertLegacyDataNotMigrated(state);
       if (state.local_data_claimed_parent_id !== null) {
         if (state.local_data_claimed_parent_id === parent.id) {
           return { claimedChildren: state.local_data_claimed_children ?? 0 };
@@ -575,7 +578,7 @@ export class PostgresPagePassStore {
       `;
       if (localChildren.length > 0) {
         await transaction`
-          UPDATE pairing_sessions
+          UPDATE legacy_pairing_sessions
           SET consumed_at = ${new Date(this.now())}
           WHERE child_profile_id IN (
             SELECT id
@@ -644,6 +647,7 @@ export class PostgresPagePassStore {
     const id = randomUUID();
     await this.sql.begin(async (transaction) => {
       const state = await lockServerState(transaction);
+      assertLegacyDataNotMigrated(state);
       if (
         authenticatedParent.authentication === "local" &&
         state.local_data_claimed_parent_id !== null
@@ -671,7 +675,8 @@ export class PostgresPagePassStore {
     const qrToken = randomBytes(32).toString("base64url");
     const expiresAt = new Date(this.now() + pairingLifetimeMs);
     return this.sql.begin(async (transaction) => {
-      await lockServerState(transaction);
+      const state = await lockServerState(transaction);
+      assertLegacyDataNotMigrated(state);
       const children = await transaction<{ id: string }[]>`
         SELECT id::text AS id
         FROM children
@@ -684,9 +689,9 @@ export class PostgresPagePassStore {
       }
 
       for (;;) {
-        const numericCode = randomInt(0, 1_000_000).toString().padStart(6, "0");
+        const numericCode = randomInt(0, 900_000).toString().padStart(6, "0");
         const inserted = await transaction<{ id: string }[]>`
-          INSERT INTO pairing_sessions (
+          INSERT INTO legacy_pairing_sessions (
             id,
             child_profile_id,
             qr_token_hash,
@@ -721,7 +726,8 @@ export class PostgresPagePassStore {
   ): Promise<PairingConsumeResponse> {
     try {
       const outcome = await this.sql.begin<PairingOutcome>(async (transaction) => {
-        await lockServerState(transaction);
+        const state = await lockServerState(transaction);
+        assertLegacyDataNotMigrated(state);
         const isNumericCode = input.numericCode !== undefined;
         if (isNumericCode) {
           const rateLimitError = await recordNumericAttempt(
@@ -744,7 +750,7 @@ export class PostgresPagePassStore {
                 child_profile_id::text AS child_profile_id,
                 expires_at,
                 consumed_at
-              FROM pairing_sessions
+              FROM legacy_pairing_sessions
               WHERE numeric_code_hash = ${secretHash}
               FOR UPDATE
             `
@@ -754,7 +760,7 @@ export class PostgresPagePassStore {
                 child_profile_id::text AS child_profile_id,
                 expires_at,
                 consumed_at
-              FROM pairing_sessions
+              FROM legacy_pairing_sessions
               WHERE qr_token_hash = ${secretHash}
               FOR UPDATE
             `;
@@ -909,7 +915,7 @@ export class PostgresPagePassStore {
           `;
         }
         await transaction`
-          UPDATE pairing_sessions
+          UPDATE legacy_pairing_sessions
           SET consumed_at = ${new Date(now)}
           WHERE id = ${session.id}
         `;
@@ -954,7 +960,8 @@ export class PostgresPagePassStore {
     const authenticatedParent = this.parentForOperation(parent);
     const fingerprint = stableFingerprint({ childProfileId, ...input });
     return this.sql.begin(async (transaction) => {
-      await lockServerState(transaction);
+      const state = await lockServerState(transaction);
+      assertLegacyDataNotMigrated(state);
       const children = await transaction<{ id: string }[]>`
         SELECT id::text AS id
         FROM children
@@ -1059,6 +1066,7 @@ export class PostgresPagePassStore {
       balanceSeconds: Number(row.balance_seconds),
       policyVersion: 1,
       ledgerRevision: Number(row.ledger_revision),
+      sessionPresetSeconds: [900, 1_800, 3_600],
       serverInstanceId: row.server_instance_id,
       serverTime: now,
       lastSyncedAt: now
@@ -1096,7 +1104,8 @@ export class PostgresPagePassStore {
     }
 
     return this.sql.begin(async (transaction) => {
-      await lockServerState(transaction);
+      const state = await lockServerState(transaction);
+      assertLegacyDataNotMigrated(state);
       const children = await transaction<{ id: string }[]>`
         SELECT id::text AS id
         FROM children
@@ -1321,7 +1330,9 @@ async function lockServerState(
       pepper_check,
       ledger_revision,
       local_data_claimed_parent_id::text,
-      local_data_claimed_children
+      local_data_claimed_children,
+      local_data_migrated_family_id::text,
+      local_data_migrated_children
     FROM server_state
     WHERE singleton = true
     FOR UPDATE
@@ -1329,6 +1340,16 @@ async function lockServerState(
   const state = rows[0];
   if (state === undefined) throw new Error("PagePass server state is missing");
   return state;
+}
+
+function assertLegacyDataNotMigrated(state: ServerStateRow): void {
+  if (state.local_data_migrated_family_id !== null) {
+    throw new ApiError(
+      409,
+      "local_data_already_claimed",
+      "Legacy local data has already been migrated"
+    );
+  }
 }
 
 async function incrementLedgerRevision(

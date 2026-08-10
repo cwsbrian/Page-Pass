@@ -2,6 +2,7 @@ name: PagePass
 
 options:
   bundleIdPrefix: com.pagepass
+  developmentLanguage: en
   deploymentTarget:
     iOS: "17.4"
   groupSortPosition: top
@@ -28,16 +29,23 @@ targets:
       - package: PagePassCore
       - target: PagePassDeviceActivityMonitor
         embed: true
+    attributes:
+      SystemCapabilities:
+        com.apple.Push:
+          enabled: 1
     info:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: PagePass
         CFBundleShortVersionString: "0.1.0"
         CFBundleVersion: "1"
+        ITSAppUsesNonExemptEncryption: false
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: $(PAGEPASS_ALLOWS_ARBITRARY_LOADS)
-          NSAllowsLocalNetworking: true
-        NSCameraUsageDescription: Scan a PagePass child-device pairing code.
+          NSAllowsLocalNetworking: $(PAGEPASS_ALLOWS_LOCAL_NETWORKING)
+        PagePassAPIBaseURL: $(PAGEPASS_API_BASE_URL)
+        PagePassLocalParentToken: $(PAGEPASS_LOCAL_PARENT_TOKEN)
+        NSCameraUsageDescription: Scan pairing codes and handwritten book reports.
         NSLocalNetworkUsageDescription: PagePass connects to the development server on your local network.
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
@@ -54,14 +62,25 @@ targets:
         MARKETING_VERSION: 0.1.0
         PRODUCT_BUNDLE_IDENTIFIER: com.pagepass.app
         PRODUCT_NAME: PagePass
+        LOCALIZATION_PREFERS_STRING_CATALOGS: true
+        SWIFT_EMIT_LOC_STRINGS: true
       configs:
         Debug:
+          APS_ENVIRONMENT: development
           PAGEPASS_ALLOWS_ARBITRARY_LOADS: true
+          PAGEPASS_ALLOWS_LOCAL_NETWORKING: true
+          PAGEPASS_API_BASE_URL: http://192.168.30.164:8787
+          PAGEPASS_LOCAL_PARENT_TOKEN: pagepass-local-parent
         Release:
+          APS_ENVIRONMENT: production
           PAGEPASS_ALLOWS_ARBITRARY_LOADS: false
+          PAGEPASS_ALLOWS_LOCAL_NETWORKING: false
+          PAGEPASS_API_BASE_URL: https://api.pagepass.app
+          PAGEPASS_LOCAL_PARENT_TOKEN: ""
     scheme:
       testTargets:
         - PagePassTests
+        - PagePassUITests
 
   PagePassDeviceActivityMonitor:
     type: app-extension
@@ -99,3 +118,16 @@ targets:
       base:
         GENERATE_INFOPLIST_FILE: true
         PRODUCT_BUNDLE_IDENTIFIER: com.pagepass.app.tests
+
+  PagePassUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: UITests
+    dependencies:
+      - target: PagePass
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: true
+        PRODUCT_BUNDLE_IDENTIFIER: com.pagepass.app.uitests
+        TEST_TARGET_NAME: PagePass

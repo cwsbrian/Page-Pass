@@ -2,19 +2,42 @@
   "name": "page-pass",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "packageManager": "pnpm@10.30.0",
+  "engines": {
+    "node": ">=22.18.0 <27"
+  },
   "scripts": {
     "nx": "nx",
     "build": "nx run-many -t build",
     "test": "nx run-many -t test",
+    "dev:api": "nx serve api",
+    "db:start": "docker compose up -d postgres",
+    "db:stop": "docker compose stop postgres",
+    "storage:start": "docker compose up -d minio",
+    "storage:stop": "docker compose stop minio",
+    "db:generate": "nx run api:prisma-generate",
+    "db:migrate": "nx run api:migrate-dev",
+    "db:deploy": "nx run api:migrate-deploy",
+    "db:studio": "nx run api:prisma-studio",
     "ios:generate": "nx run mobile-ios:generate",
     "ios:build": "nx run mobile-ios:build",
-    "ios:test": "nx run mobile-ios:test"
+    "ios:test": "nx run mobile-ios:test",
+    "ios:release-verify": "nx run mobile-ios:release-verify",
+    "ios:archive-verify": "nx run mobile-ios:archive-verify",
+    "ops:check": "node scripts/check-api-operations.mjs"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1105.0",
+    "@aws-sdk/s3-request-presigner": "^3.1105.0",
+    "@fastify/cors": "^11.3.0",
+    "@prisma/adapter-pg": "7.8.0",
     "@prisma/client": "7.8.0",
+    "better-auth": "^1.6.25",
+    "fastify": "^5.10.0",
     "jose": "^6.2.3",
     "postgres": "^3.4.9",
+    "resend": "^6.18.0",
     "zod": "4.4.3"
   },
   "devDependencies": {

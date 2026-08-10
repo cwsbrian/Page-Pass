@@ -20,17 +20,23 @@
 	<string>0.1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<string>$(PAGEPASS_ALLOWS_ARBITRARY_LOADS)</string>
 		<key>NSAllowsLocalNetworking</key>
-		<true/>
+		<string>$(PAGEPASS_ALLOWS_LOCAL_NETWORKING)</string>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Scan a PagePass child-device pairing code.</string>
+	<string>Scan pairing codes and handwritten book reports.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>PagePass connects to the development server on your local network.</string>
+	<key>PagePassAPIBaseURL</key>
+	<string>$(PAGEPASS_API_BASE_URL)</string>
+	<key>PagePassLocalParentToken</key>
+	<string>$(PAGEPASS_LOCAL_PARENT_TOKEN)</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>

@@ -1,4 +1,7 @@
 import { defineConfig } from "prisma/config";
+import { loadRootEnv } from "./apps/api/src/load-env";
+
+loadRootEnv();
 
 export default defineConfig({
   schema: "apps/api/prisma/schema.prisma",

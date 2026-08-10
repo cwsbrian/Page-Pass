@@ -43,7 +43,17 @@ struct EarnedTimeScheduler {
         }
 
         let activity = PagePassScreenTime.activityName(for: sessionID)
-        let stale = center.activities.filter(PagePassScreenTime.isEarnedTimeActivity)
+        if center.activities.contains(activity) {
+            guard center.schedule(for: activity) == schedule,
+                  center.events(for: activity).isEmpty else {
+                throw SchedulerError.registrationMismatch
+            }
+            return
+        }
+
+        let stale = center.activities.filter {
+            PagePassScreenTime.isEarnedTimeActivity($0)
+        }
         center.stopMonitoring(stale)
         try center.startMonitoring(activity, during: schedule, events: [:])
 
@@ -53,10 +63,21 @@ struct EarnedTimeScheduler {
             center.stopMonitoring([activity])
             throw SchedulerError.registrationMismatch
         }
+        PagePassScreenTime.recordMonitorDiagnostic(
+            "registered",
+            activity: activity,
+            detail: "start=\(scheduleStart.timeIntervalSince1970);end=\(scheduleEnd.timeIntervalSince1970)"
+        )
     }
 
     func stop(sessionID: UUID) {
         center.stopMonitoring([PagePassScreenTime.activityName(for: sessionID)])
+    }
+
+    func stopAllEarnedTime() {
+        center.stopMonitoring(
+            center.activities.filter(PagePassScreenTime.isEarnedTimeActivity)
+        )
     }
 
     private func dateComponents(
@@ -72,4 +93,3 @@ struct EarnedTimeScheduler {
         return components
     }
 }
-

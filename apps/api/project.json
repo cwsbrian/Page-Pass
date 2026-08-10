@@ -7,6 +7,11 @@
     "build": {
       "executor": "nx:run-commands",
       "dependsOn": ["prisma-generate"],
+      "inputs": [
+        "default",
+        "{workspaceRoot}/package.json",
+        "{workspaceRoot}/tsconfig.base.json"
+      ],
       "outputs": ["{workspaceRoot}/dist/apps/api"],
       "options": {
         "command": "pnpm exec tsc -p apps/api/tsconfig.json"
@@ -15,7 +20,7 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm exec tsx --test apps/api/src/main.test.ts"
+        "command": "pnpm exec tsx --test apps/api/src/main.test.ts apps/api/src/foundation.test.ts apps/api/src/push/push-service.test.ts apps/api/src/reading/media-deletion-worker.test.ts apps/api/src/operations/data-retention-worker.test.ts scripts/check-api-operations.test.mjs"
       }
     },
     "integration-test": {
@@ -28,6 +33,48 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "if [ -n \"$TEST_DATABASE_URL\" ]; then DATABASE_URL=\"$TEST_DATABASE_URL\" pnpm exec prisma migrate deploy --config prisma.config.ts || exit $?; fi; pnpm exec tsx --test apps/api/src/postgres-auth.integration.test.ts"
+      }
+    },
+    "better-auth-integration-test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "if [ -n \"$TEST_DATABASE_URL\" ]; then DATABASE_URL=\"$TEST_DATABASE_URL\" pnpm exec prisma migrate deploy --config prisma.config.ts || exit $?; fi; pnpm exec tsx --test apps/api/src/better-auth.integration.test.ts"
+      }
+    },
+    "family-integration-test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "if [ -n \"$TEST_DATABASE_URL\" ]; then DATABASE_URL=\"$TEST_DATABASE_URL\" pnpm exec prisma migrate deploy --config prisma.config.ts || exit $?; fi; pnpm exec tsx --test apps/api/src/family.integration.test.ts"
+      }
+    },
+    "legacy-family-claim-integration-test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "if [ -n \"$TEST_DATABASE_URL\" ]; then DATABASE_URL=\"$TEST_DATABASE_URL\" pnpm exec prisma migrate deploy --config prisma.config.ts || exit $?; fi; pnpm exec tsx --test apps/api/src/legacy-family-claim.integration.test.ts"
+      }
+    },
+    "credit-integration-test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "if [ -n \"$TEST_DATABASE_URL\" ]; then DATABASE_URL=\"$TEST_DATABASE_URL\" pnpm exec prisma migrate deploy --config prisma.config.ts || exit $?; fi; pnpm exec tsx --test apps/api/src/credit.integration.test.ts"
+      }
+    },
+    "app-access-integration-test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "if [ -n \"$TEST_DATABASE_URL\" ]; then DATABASE_URL=\"$TEST_DATABASE_URL\" pnpm exec prisma migrate deploy --config prisma.config.ts || exit $?; fi; pnpm exec tsx --test apps/api/src/app-access.integration.test.ts"
+      }
+    },
+    "reading-integration-test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "if [ -n \"$TEST_DATABASE_URL\" ]; then DATABASE_URL=\"$TEST_DATABASE_URL\" pnpm exec prisma migrate deploy --config prisma.config.ts || exit $?; fi; pnpm exec tsx --test apps/api/src/reading.integration.test.ts"
+      }
+    },
+    "media-storage-integration-test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec tsx --test apps/api/src/media-storage.integration.test.ts"
       }
     },
     "adversarial-integration-test": {

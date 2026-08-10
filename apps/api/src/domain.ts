@@ -290,6 +290,7 @@ export class PagePassStore {
       balanceSeconds: this.balanceFor(child.id),
       policyVersion: 1,
       ledgerRevision: this.ledgerRevision,
+      sessionPresetSeconds: [900, 1_800, 3_600],
       serverInstanceId: this.serverInstanceId,
       serverTime: now,
       lastSyncedAt: now

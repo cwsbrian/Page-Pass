@@ -1,4 +1,3 @@
-import AuthenticationServices
 import Foundation
 import Observation
 
@@ -12,10 +11,11 @@ final class ParentAuthStore {
     }
 
     private(set) var phase: Phase = .loading
-    private(set) var challenge: AppleAuthChallengeResponse?
     private(set) var parent: ParentIdentity?
     private(set) var isWorking = false
+    private(set) var passwordResetToken: String?
     var errorMessage: String?
+    var noticeMessage: String?
 
     private let credentials = ParentSessionCredentialStore()
 
@@ -27,35 +27,20 @@ final class ParentAuthStore {
         do {
             if let pendingToken = try await credentials.loadPendingRevocationToken() {
                 do {
-                    try await client().revokeParentSession(parentToken: pendingToken)
+                    try await revokeServerSession(
+                        token: pendingToken,
+                        isLegacyApple: try await credentials
+                            .pendingRevocationUsesLegacySession()
+                    )
                 } catch let error as PagePassAPIClient.ClientError
                     where error.isUnauthorized {
-                    // An already-expired or already-revoked token is settled.
+                    // The session is already gone.
                 }
                 try await credentials.clearPendingRevocation()
             }
             guard let token = try await credentials.loadSessionToken() else {
                 phase = .signedOut
-                await prepareChallenge()
                 return
-            }
-            guard let appleUserID = try await credentials.loadAppleUserID() else {
-                try await credentials.delete()
-                phase = .signedOut
-                await prepareChallenge()
-                return
-            }
-            if let credentialState = await credentialState(for: appleUserID) {
-                switch credentialState {
-                case .authorized:
-                    break
-                case .revoked, .notFound, .transferred:
-                    await invalidateSession(token: token)
-                    return
-                @unknown default:
-                    await invalidateSession(token: token)
-                    return
-                }
             }
             parent = try await client().parentIdentity(parentToken: token)
             phase = .authenticated
@@ -65,77 +50,128 @@ final class ParentAuthStore {
             try? await credentials.delete()
             phase = .signedOut
             errorMessage = error.localizedDescription
-            await prepareChallenge()
         } catch {
-            let hasPendingRevocation = (try? await credentials.loadPendingRevocationToken()) != nil
-            // Preserve active sessions through outages, but never reactivate a signed-out token.
+            let hasPendingRevocation =
+                (try? await credentials.loadPendingRevocationToken()) != nil
             phase = hasPendingRevocation ? .signedOut : .authenticated
             errorMessage = error.localizedDescription
         }
     }
 
-    func prepareChallenge() async {
-        guard !isWorking else { return }
-        isWorking = true
-        defer { isWorking = false }
-        do {
-            challenge = try await client().appleAuthChallenge()
-            errorMessage = nil
-        } catch {
-            challenge = nil
-            errorMessage = error.localizedDescription
+    func signIn(email: String, password: String) async -> Bool {
+        let email = normalizedEmail(email)
+        guard !email.isEmpty, !password.isEmpty else {
+            errorMessage = "Enter your email and password."
+            return false
         }
-    }
-
-    func configure(_ request: ASAuthorizationAppleIDRequest) {
-        guard let challenge else { return }
-        request.requestedScopes = [.fullName, .email]
-        request.nonce = challenge.nonce
-        request.state = challenge.challengeId
-    }
-
-    func complete(_ result: Result<ASAuthorization, any Error>) async {
-        guard !isWorking else { return }
-        isWorking = true
-        defer { isWorking = false }
-        do {
-            let authorization = try result.get()
-            guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
-                  let tokenData = credential.identityToken,
-                  let identityToken = String(data: tokenData, encoding: .utf8),
-                  let challenge,
-                  credential.state == challenge.challengeId else {
-                throw ParentAuthError.invalidCredential
-            }
-
-            let displayName = credential.fullName.flatMap { components in
-                let value = PersonNameComponentsFormatter().string(from: components)
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
-                return value.isEmpty ? nil : value
-            }
-            let response = try await client().createParentSession(
-                challengeID: challenge.challengeId,
-                state: credential.state ?? "",
-                identityToken: identityToken,
-                displayName: displayName
+        return await perform {
+            let response = try await client().signInParent(
+                email: email,
+                password: password
             )
-            try await credentials.save(
-                sessionToken: response.sessionToken,
-                appleUserID: credential.user
-            )
-            parent = response.parent
+            guard let token = response.token, !token.isEmpty else {
+                throw ParentAuthError.missingSession
+            }
+            let identity = try await client().parentIdentity(parentToken: token)
+            do {
+                try await credentials.save(sessionToken: token)
+            } catch {
+                try? await client().signOutParent(parentToken: token)
+                throw error
+            }
+            parent = identity
             phase = .authenticated
-            self.challenge = nil
-            errorMessage = nil
-        } catch let error as ASAuthorizationError where error.code == .canceled {
-            errorMessage = nil
-        } catch {
-            phase = .signedOut
-            errorMessage = error.localizedDescription
-            challenge = nil
-            isWorking = false
-            await prepareChallenge()
+            noticeMessage = nil
         }
+    }
+
+    func signUp(name: String, email: String, password: String) async -> Bool {
+        let name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let email = normalizedEmail(email)
+        guard !name.isEmpty, !email.isEmpty, password.count >= 8 else {
+            errorMessage = "Enter a name, valid email, and password of at least 8 characters."
+            return false
+        }
+        return await perform {
+            _ = try await client().signUpParent(
+                name: name,
+                email: email,
+                password: password
+            )
+            phase = .signedOut
+            noticeMessage = "Verification email sent."
+        }
+    }
+
+    func resendVerification(email: String) async -> Bool {
+        let email = normalizedEmail(email)
+        guard !email.isEmpty else {
+            errorMessage = "Enter your email."
+            return false
+        }
+        return await perform {
+            try await client().resendParentVerification(email: email)
+            noticeMessage = "Verification email sent."
+        }
+    }
+
+    func requestPasswordReset(email: String) async -> Bool {
+        let email = normalizedEmail(email)
+        guard !email.isEmpty else {
+            errorMessage = "Enter your email."
+            return false
+        }
+        return await perform {
+            try await client().requestParentPasswordReset(email: email)
+            noticeMessage = "Password reset email sent."
+        }
+    }
+
+    func resetPassword(_ password: String) async -> Bool {
+        guard let token = passwordResetToken else {
+            errorMessage = "The password reset link is invalid."
+            return false
+        }
+        guard password.count >= 8 else {
+            errorMessage = "Use a password of at least 8 characters."
+            return false
+        }
+        return await perform {
+            try await client().resetParentPassword(
+                token: token,
+                newPassword: password
+            )
+            passwordResetToken = nil
+            noticeMessage = "Password updated. Sign in with your new password."
+        }
+    }
+
+    func handle(url: URL) {
+        guard url.scheme == "pagepass", url.host == "auth" else { return }
+        let parameters = URLComponents(
+            url: url,
+            resolvingAgainstBaseURL: false
+        )?.queryItems
+        if let error = parameters?.first(where: { $0.name == "error" })?.value {
+            errorMessage = error.replacingOccurrences(of: "_", with: " ")
+            return
+        }
+        switch url.path {
+        case "/email-verified":
+            noticeMessage = "Email verified. You can sign in."
+        case "/reset-password":
+            passwordResetToken = parameters?
+                .first(where: { $0.name == "token" })?.value
+            if passwordResetToken == nil {
+                errorMessage = "The password reset link is invalid."
+            }
+        default:
+            break
+        }
+    }
+
+    func clearPasswordReset() {
+        passwordResetToken = nil
     }
 
     func signOut() async {
@@ -146,12 +182,26 @@ final class ParentAuthStore {
         }
     }
 
-    func handleCredentialRevocation() async {
-        guard PagePassRuntimeConfiguration.parentToken == nil else { return }
+    func deleteAccount() async -> String? {
+        guard !isWorking else { return "Please wait for the current request to finish." }
+        isWorking = true
+        defer { isWorking = false }
         do {
-            await invalidateSession(token: try await credentials.loadSessionToken())
+            guard let token = try await credentials.loadSessionToken() else {
+                throw ParentAuthError.missingSession
+            }
+            try await client().deleteParentAccount(parentToken: token)
+            try await credentials.delete()
+            try? await credentials.clearPendingRevocation()
+            parent = nil
+            phase = .signedOut
+            errorMessage = nil
+            noticeMessage = "Your PagePass account was deleted."
+            return nil
         } catch {
-            errorMessage = error.localizedDescription
+            let message = error.localizedDescription
+            errorMessage = message
+            return message
         }
     }
 
@@ -159,7 +209,10 @@ final class ParentAuthStore {
         if let token {
             var serverSessionSettled = false
             do {
-                try await client().revokeParentSession(parentToken: token)
+                try await revokeServerSession(
+                    token: token,
+                    isLegacyApple: try await credentials.usesLegacyAppleSession()
+                )
                 serverSessionSettled = true
             } catch let error as PagePassAPIClient.ClientError
                 where error.isUnauthorized {
@@ -168,43 +221,52 @@ final class ParentAuthStore {
                 do {
                     try await credentials.moveSessionToPendingRevocation()
                 } catch {
-                    // The active token is still present, so sign-out did not complete.
                     errorMessage = error.localizedDescription
                     return
                 }
                 errorMessage = error.localizedDescription
             }
             if serverSessionSettled {
-                do {
-                    try await credentials.delete()
-                    try await credentials.clearPendingRevocation()
-                } catch {
-                    // The server token is dead even if local cleanup must retry later.
-                    errorMessage = error.localizedDescription
-                }
+                try? await credentials.delete()
+                try? await credentials.clearPendingRevocation()
             }
         } else {
             try? await credentials.delete()
         }
         parent = nil
         phase = .signedOut
-        challenge = nil
         if (try? await credentials.loadPendingRevocationToken()) == nil {
             errorMessage = nil
-            await prepareChallenge()
         }
     }
 
-    private func credentialState(
-        for appleUserID: String
-    ) async -> ASAuthorizationAppleIDProvider.CredentialState? {
-        await withCheckedContinuation { continuation in
-            ASAuthorizationAppleIDProvider().getCredentialState(forUserID: appleUserID) {
-                state,
-                error in
-                continuation.resume(returning: error == nil ? state : nil)
-            }
+    private func revokeServerSession(
+        token: String,
+        isLegacyApple: Bool
+    ) async throws {
+        if isLegacyApple {
+            try await client().revokeParentSession(parentToken: token)
+        } else {
+            try await client().signOutParent(parentToken: token)
         }
+    }
+
+    private func perform(_ operation: () async throws -> Void) async -> Bool {
+        guard !isWorking else { return false }
+        isWorking = true
+        defer { isWorking = false }
+        do {
+            try await operation()
+            errorMessage = nil
+            return true
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
+    }
+
+    private func normalizedEmail(_ value: String) -> String {
+        value.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     }
 
     private func client() throws -> PagePassAPIClient {
@@ -224,9 +286,9 @@ private extension PagePassAPIClient.ClientError {
 }
 
 private enum ParentAuthError: LocalizedError {
-    case invalidCredential
+    case missingSession
 
     var errorDescription: String? {
-        "Apple returned an invalid sign-in credential."
+        "The server did not create a parent session."
     }
 }

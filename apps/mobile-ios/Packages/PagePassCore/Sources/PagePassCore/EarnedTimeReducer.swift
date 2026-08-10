@@ -2,6 +2,7 @@ import Foundation
 
 public enum EarnedTimeAction: Equatable, Sendable {
     case prepareSession(id: UUID, durationSeconds: Int, startedAt: Date)
+    case activationConfirmed(id: UUID, startedAt: Date)
     case scheduleRegistered(id: UUID, registeredAt: Date)
     case scheduleRegistrationFailed(id: UUID)
     case beginEnding(id: UUID, endedAt: Date, reason: EarnedTimeSessionEndReason)
@@ -46,6 +47,24 @@ public enum EarnedTimeReducer {
                 phase: .arming
             )
 
+        case let .activationConfirmed(id, startedAt):
+            guard let session = state.session,
+                  session.id == id,
+                  session.phase == .arming else {
+                throw EarnedTimeReducerError.invalidTransition
+            }
+            let startedAt = canonicalTimestamp(startedAt)
+            state.session = EarnedTimeSession(
+                id: session.id,
+                balanceBeforeSeconds: session.balanceBeforeSeconds,
+                requestedDurationSeconds: session.requestedDurationSeconds,
+                startedAt: startedAt,
+                expiresAt: startedAt.addingTimeInterval(
+                    TimeInterval(session.requestedDurationSeconds)
+                ),
+                phase: .arming
+            )
+
         case let .scheduleRegistered(id, registeredAt):
             guard var session = state.session,
                   session.id == id,
@@ -73,7 +92,8 @@ public enum EarnedTimeReducer {
                 return
             }
             let endedAt = canonicalTimestamp(endedAt)
-            if reason != .manualStop, endedAt < session.expiresAt {
+            if ![.manualStop, .activationFailed].contains(reason),
+               endedAt < session.expiresAt {
                 throw EarnedTimeReducerError.expiryBeforeDeadline
             }
             session.phase = .ending
@@ -98,6 +118,8 @@ public enum EarnedTimeReducer {
                     session.requestedDurationSeconds,
                     Int(ceil(elapsed))
                 )
+            case .activationFailed:
+                consumedSeconds = 0
             case .expired, .recovery:
                 consumedSeconds = session.requestedDurationSeconds
             }

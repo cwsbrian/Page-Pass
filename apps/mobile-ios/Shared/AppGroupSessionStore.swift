@@ -63,8 +63,11 @@ struct AppGroupSessionStore {
     }
 
     private func saveUnlocked(_ state: EarnedTimeState) throws {
-        defaults.set(try JSONEncoder().encode(state), forKey: key)
-        defaults.synchronize()
+        let data = try JSONEncoder().encode(state)
+        defaults.set(data, forKey: key)
+        guard defaults.data(forKey: key) == data else {
+            throw StoreError.persistenceFailed
+        }
     }
 
     private func withExclusiveLock<T>(_ operation: () throws -> T) throws -> T {

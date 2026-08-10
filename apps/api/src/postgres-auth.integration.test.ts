@@ -45,6 +45,7 @@ async function resetDatabase(url: string): Promise<void> {
         earned_time_spends,
         credit_grants,
         active_devices,
+        legacy_pairing_sessions,
         pairing_sessions,
         children,
         server_state

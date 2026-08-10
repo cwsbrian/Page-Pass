@@ -5,17 +5,31 @@ struct RootView: View {
 
     var body: some View {
         Group {
-            switch InstallationRole(rawValue: storedRole) {
+            switch effectiveRole {
             case .parent:
                 ParentGateView()
             case .child:
-                ChildHomeView()
+                ChildTabView {
+                    storedRole = ""
+                }
             case nil:
                 InstallationRoleView { role in
                     storedRole = role.rawValue
                 }
             }
         }
+        .tint(PagePassTheme.tint)
+    }
+
+    private var effectiveRole: InstallationRole? {
+#if DEBUG
+        if let testRole = ProcessInfo.processInfo.environment[
+            "PAGEPASS_UI_TEST_ROLE"
+        ] {
+            return InstallationRole(rawValue: testRole)
+        }
+#endif
+        return InstallationRole(rawValue: storedRole)
     }
 }
 
@@ -33,12 +47,18 @@ private struct InstallationRoleView: View {
                 Button {
                     selectRole(.parent)
                 } label: {
-                    Label("Parent", systemImage: "person.crop.circle.badge.checkmark")
+                    PagePassActionLabel(
+                        title: "Parent",
+                        systemImage: "person.crop.circle.badge.checkmark"
+                    )
                 }
                 Button {
                     selectRole(.child)
                 } label: {
-                    Label("Child", systemImage: "person.crop.circle")
+                    PagePassActionLabel(
+                        title: "Child",
+                        systemImage: "person.crop.circle"
+                    )
                 }
             }
             .navigationTitle("PagePass")

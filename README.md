@@ -4,6 +4,11 @@ PagePass is an Nx monorepo with a native SwiftUI iOS product app. The original
 Screen Time spike remains separate as validation evidence and is not the product
 application.
 
+## License
+
+The source code in this repository is licensed under the [MIT License](LICENSE).
+The root package remains marked `private` to prevent accidental npm publication.
+
 ## Workspace
 
 ```text
